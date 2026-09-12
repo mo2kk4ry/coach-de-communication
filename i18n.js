@@ -1,0 +1,76 @@
+// Minimal i18n: FR (default) / EN. Add more languages by adding a key here.
+const I18N = {
+  fr: {
+    promptTitle: "Choisis un sujet à pratiquer",
+    shuffle: "🎲 Un autre sujet",
+    ownTopic: "Écrire mon propre sujet",
+    useThis: "Utiliser ce sujet",
+    recordTitle: "Enregistre-toi",
+    startRecording: "Commencer",
+    stopRecording: "Arrêter",
+    micHint: "Le micro reste privé : rien n'est envoyé nulle part sans ton accord, sauf si tu demandes un retour IA.",
+    transcriptTitle: "Ce que tu as dit",
+    editHint: "Tu peux corriger le texte si la transcription automatique s'est trompée.",
+    metricsTitle: "Aperçu rapide",
+    mDurationLabel: "Durée",
+    mWpmLabel: "Mots / minute",
+    mWordsLabel: "Mots au total",
+    mFillersLabel: "Mots de remplissage",
+    aiTitle: "Retour détaillé (IA)",
+    noKeyNotice: "Ajoute ta clé API Claude dans les Réglages pour débloquer un retour détaillé et personnalisé.",
+    openSettings: "Ouvrir les réglages",
+    getFeedback: "✨ Obtenir mon retour",
+    thinking: "Claude réfléchit à ton retour…",
+    historyTitle: "Mes sessions précédentes",
+    clearHistory: "Tout effacer",
+    noHistory: "Pas encore de session. Ta première pratique apparaîtra ici.",
+    newSession: "↻ Nouvelle session",
+    footerNote: "Projet étudiant open-source — fait pour aider d'autres étudiants à pratiquer leur communication.",
+    settingsTitle: "Réglages",
+    apiKeyLabel: "Clé API Claude (Anthropic)",
+    apiKeyHint: "Ta clé reste uniquement dans ton navigateur (jamais envoyée ailleurs qu'à l'API d'Anthropic). Crée-en une gratuitement sur",
+    save: "Enregistrer",
+    removeKey: "Retirer ma clé",
+  },
+  en: {
+    promptTitle: "Pick a topic to practice",
+    shuffle: "🎲 Another topic",
+    ownTopic: "Write my own topic",
+    useThis: "Use this topic",
+    recordTitle: "Record yourself",
+    startRecording: "Start",
+    stopRecording: "Stop",
+    micHint: "Your mic stays private: nothing is sent anywhere without your consent, unless you ask for AI feedback.",
+    transcriptTitle: "What you said",
+    editHint: "You can fix the text if the automatic transcription got something wrong.",
+    metricsTitle: "Quick overview",
+    mDurationLabel: "Duration",
+    mWpmLabel: "Words / minute",
+    mWordsLabel: "Total words",
+    mFillersLabel: "Filler words",
+    aiTitle: "Detailed feedback (AI)",
+    noKeyNotice: "Add your Claude API key in Settings to unlock detailed, personalized feedback.",
+    openSettings: "Open settings",
+    getFeedback: "✨ Get my feedback",
+    thinking: "Claude is thinking about your feedback…",
+    historyTitle: "My past sessions",
+    clearHistory: "Clear all",
+    noHistory: "No sessions yet. Your first practice will show up here.",
+    newSession: "↻ New session",
+    footerNote: "Open-source student project — built to help other students practice their communication.",
+    settingsTitle: "Settings",
+    apiKeyLabel: "Claude API key (Anthropic)",
+    apiKeyHint: "Your key stays only in your browser (never sent anywhere except Anthropic's API). Create one for free at",
+    save: "Save",
+    removeKey: "Remove my key",
+  },
+};
+
+function applyI18n(lang) {
+  const dict = I18N[lang] || I18N.fr;
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    const key = el.getAttribute("data-i18n");
+    if (dict[key]) el.textContent = dict[key];
+  });
+  document.documentElement.lang = lang;
+}

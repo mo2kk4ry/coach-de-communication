@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Coach de communication</title>
 <link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -64,19 +67,23 @@
       <section class="card" id="metricsCard" hidden>
         <h2 data-i18n="metricsTitle">Aperçu rapide</h2>
         <div class="metrics-grid">
-          <div class="metric">
+          <div class="metric metric--duration">
+            <span class="metric-icon">⏱️</span>
             <span class="metric-value" id="mDuration">–</span>
             <span class="metric-label" data-i18n="mDurationLabel">Durée</span>
           </div>
-          <div class="metric">
+          <div class="metric metric--wpm">
+            <span class="metric-icon">⚡</span>
             <span class="metric-value" id="mWpm">–</span>
             <span class="metric-label" data-i18n="mWpmLabel">Mots / minute</span>
           </div>
-          <div class="metric">
+          <div class="metric metric--words">
+            <span class="metric-icon">💬</span>
             <span class="metric-value" id="mWords">–</span>
             <span class="metric-label" data-i18n="mWordsLabel">Mots au total</span>
           </div>
-          <div class="metric">
+          <div class="metric metric--fillers">
+            <span class="metric-icon">🔁</span>
             <span class="metric-value" id="mFillers">–</span>
             <span class="metric-label" data-i18n="mFillersLabel">Mots de remplissage</span>
           </div>

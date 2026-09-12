@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coach de communication</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">🎙️</span>
+        <div>
+          <h1>Coach de communication</h1>
+          <p class="tagline">Pratique. Enregistre. Progresse.</p>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button id="langToggle" class="ghost-btn" type="button" title="Changer la langue">FR / EN</button>
+        <button id="settingsBtn" class="ghost-btn" type="button" title="Paramètres">⚙️ Réglages</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- STEP 1: Prompt -->
+      <section class="card" id="promptCard">
+        <div class="card-head">
+          <h2 data-i18n="promptTitle">Choisis un sujet à pratiquer</h2>
+          <button id="shufflePrompt" class="ghost-btn small" type="button" data-i18n="shuffle">🎲 Un autre sujet</button>
+        </div>
+        <p id="promptText" class="prompt-text">Chargement…</p>
+        <details class="custom-prompt">
+          <summary data-i18n="ownTopic">Écrire mon propre sujet</summary>
+          <textarea id="customPrompt" rows="2" placeholder="Ex. Présente-toi en 60 secondes pour un poste en analyse de données."></textarea>
+          <button id="useCustomPrompt" class="secondary-btn" type="button" data-i18n="useThis">Utiliser ce sujet</button>
+        </details>
+      </section>
+
+      <!-- STEP 2: Record -->
+      <section class="card" id="recordCard">
+        <h2 data-i18n="recordTitle">Enregistre-toi</h2>
+        <div class="recorder">
+          <button id="recordBtn" class="record-btn" type="button" aria-pressed="false">
+            <span class="dot"></span>
+            <span id="recordLabel" data-i18n="startRecording">Commencer</span>
+          </button>
+          <div class="timer" id="timer">00:00</div>
+        </div>
+        <p class="hint" id="micHint" data-i18n="micHint">Le micro reste privé : rien n'est envoyé nulle part sans ton accord, sauf si tu demandes un retour IA.</p>
+        <audio id="playback" controls hidden></audio>
+      </section>
+
+      <!-- STEP 3: Transcript -->
+      <section class="card" id="transcriptCard" hidden>
+        <h2 data-i18n="transcriptTitle">Ce que tu as dit</h2>
+        <div id="transcriptBox" class="transcript-box" contenteditable="true" spellcheck="false"></div>
+        <p class="hint" data-i18n="editHint">Tu peux corriger le texte si la transcription automatique s'est trompée.</p>
+      </section>
+
+      <!-- STEP 4: Quick metrics (always free, no API needed) -->
+      <section class="card" id="metricsCard" hidden>
+        <h2 data-i18n="metricsTitle">Aperçu rapide</h2>
+        <div class="metrics-grid">
+          <div class="metric">
+            <span class="metric-value" id="mDuration">–</span>
+            <span class="metric-label" data-i18n="mDurationLabel">Durée</span>
+          </div>
+          <div class="metric">
+            <span class="metric-value" id="mWpm">–</span>
+            <span class="metric-label" data-i18n="mWpmLabel">Mots / minute</span>
+          </div>
+          <div class="metric">
+            <span class="metric-value" id="mWords">–</span>
+            <span class="metric-label" data-i18n="mWordsLabel">Mots au total</span>
+          </div>
+          <div class="metric">
+            <span class="metric-value" id="mFillers">–</span>
+            <span class="metric-label" data-i18n="mFillersLabel">Mots de remplissage</span>
+          </div>
+        </div>
+        <p id="paceNote" class="pace-note"></p>
+        <p id="fillerNote" class="filler-note"></p>
+      </section>
+
+      <!-- STEP 5: AI feedback (optional, needs API key) -->
+      <section class="card" id="aiCard" hidden>
+        <div class="card-head">
+          <h2 data-i18n="aiTitle">Retour détaillé (IA)</h2>
+        </div>
+        <div id="aiKeyMissing" class="notice">
+          <span data-i18n="noKeyNotice">Ajoute ta clé API Claude dans les Réglages pour débloquer un retour détaillé et personnalisé.</span>
+          <button id="openSettingsFromNotice" class="secondary-btn" type="button" data-i18n="openSettings">Ouvrir les réglages</button>
+        </div>
+        <button id="getFeedbackBtn" class="primary-btn" type="button" hidden data-i18n="getFeedback">✨ Obtenir mon retour</button>
+        <div id="aiLoading" class="ai-loading" hidden><span class="spinner"></span> <span data-i18n="thinking">Claude réfléchit à ton retour…</span></div>
+        <div id="aiResult" class="ai-result" hidden></div>
+      </section>
+
+      <!-- History -->
+      <section class="card" id="historyCard">
+        <div class="card-head">
+          <h2 data-i18n="historyTitle">Mes sessions précédentes</h2>
+          <button id="clearHistory" class="ghost-btn small" type="button" data-i18n="clearHistory">Tout effacer</button>
+        </div>
+        <div id="historyList" class="history-list">
+          <p class="empty-state" data-i18n="noHistory">Pas encore de session. Ta première pratique apparaîtra ici.</p>
+        </div>
+      </section>
+
+      <div class="actions-row">
+        <button id="newSessionBtn" class="secondary-btn" type="button" hidden data-i18n="newSession">↻ Nouvelle session</button>
+      </div>
+    </main>
+
+    <footer>
+      <p data-i18n="footerNote">Projet étudiant open-source — fait pour aider d'autres étudiants à pratiquer leur communication.</p>
+    </footer>
+  </div>
+
+  <!-- Settings modal -->
+  <div id="settingsModal" class="modal" hidden>
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 data-i18n="settingsTitle">Réglages</h2>
+        <button id="closeSettings" class="ghost-btn" type="button" aria-label="Fermer">✕</button>
+      </div>
+      <label class="field-label" for="apiKeyInput" data-i18n="apiKeyLabel">Clé API Claude (Anthropic)</label>
+      <input id="apiKeyInput" type="password" placeholder="sk-ant-..." autocomplete="off" />
+      <p class="hint" data-i18n="apiKeyHint">
+        Ta clé reste uniquement dans ton navigateur (jamais envoyée ailleurs qu'à l'API d'Anthropic). Crée-en une gratuitement sur
+        <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a> — l'utilisation de l'API est payante à l'usage (quelques sous par session).
+      </p>
+      <div class="modal-buttons">
+        <button id="saveApiKey" class="primary-btn" type="button" data-i18n="save">Enregistrer</button>
+        <button id="removeApiKey" class="ghost-btn" type="button" data-i18n="removeKey">Retirer ma clé</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="i18n.js"></script>
+  <script src="prompts.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

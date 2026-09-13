@@ -15,6 +15,14 @@ const EXERCISE_MODES = [
     en: { name: "Free topic", desc: "A random topic, you speak. The classic one." },
   },
   {
+    id: "structure",
+    icon: "🧱",
+    kind: "structure",
+    prepSeconds: 90,
+    fr: { name: "Structure guidée", desc: "L'app te guide en direct, section par section." },
+    en: { name: "Guided structure", desc: "The app walks you through it, section by section." },
+  },
+  {
     id: "mot",
     icon: "🔤",
     kind: "word",
@@ -85,6 +93,24 @@ const LESSONS = {
         "Announce 3 main ideas up front: “There are three things here…”. Your listener knows where you're headed.",
         "One idea = one concrete example. Without an example, an idea stays an opinion.",
         "End on a clear closing sentence, not on “so… yeah”.",
+      ],
+    },
+  },
+  structure: {
+    fr: {
+      title: "Le squelette avant la chair",
+      rules: [
+        "Choisis ton moule AVANT de parler. Les gens structurés ne réinventent rien : ils réutilisent toujours les 3 ou 4 mêmes.",
+        "Annonce ton plan à voix haute dès la première phrase. Ça guide l'auditoire — et surtout, ça t'oblige toi à t'y tenir.",
+        "Marque chaque transition à voix haute : « premièrement », « ensuite », « en résumé ». Sans panneaux, même un bon plan sonne décousu.",
+      ],
+    },
+    en: {
+      title: "Skeleton before flesh",
+      rules: [
+        "Pick your template BEFORE speaking. Structured people don't reinvent anything: they reuse the same 3 or 4 every time.",
+        "Announce your plan out loud in your first sentence. It guides the listener — and above all, it forces you to stick to it.",
+        "Mark every transition out loud: “first”, “then”, “to sum up”. Without signposts, even a good plan sounds messy.",
       ],
     },
   },
@@ -633,6 +659,159 @@ const GOALS = [
   { id: "confiance", icon: "🔥", fr: "Gagner en confiance à l'oral", en: "Build confidence when speaking" },
   { id: "articulation", icon: "👄", fr: "Mieux articuler et parler moins vite", en: "Articulate better and slow down" },
 ];
+
+// ---------------------------------------------------------------------------
+// Les moules de structure (mode « Structure guidée »)
+// Chaque étape a une durée : l'app avance toute seule pendant l'enregistrement.
+// ---------------------------------------------------------------------------
+const FRAMEWORKS = [
+  {
+    id: "trois",
+    fr: {
+      name: "3 idées",
+      tagline: "Le passe-partout",
+      steps: [
+        { label: "Annonce ton plan", hint: "« Je vois trois choses : X, Y et Z. » Dis-les, sans les développer.", seconds: 15 },
+        { label: "Idée 1 + exemple", hint: "« Premièrement… » Développe, puis donne UN exemple concret.", seconds: 35 },
+        { label: "Idée 2 + exemple", hint: "« Ensuite… » Deuxième idée, puis un exemple.", seconds: 35 },
+        { label: "Idée 3 + exemple", hint: "« Enfin… » Troisième idée, puis un exemple.", seconds: 35 },
+        { label: "Conclusion", hint: "« En résumé… » Reprends tes trois idées en une seule phrase.", seconds: 20 },
+      ],
+    },
+    en: {
+      name: "3 ideas",
+      tagline: "The all-purpose one",
+      steps: [
+        { label: "Announce your plan", hint: "“There are three things here: X, Y and Z.” Name them, don't develop yet.", seconds: 15 },
+        { label: "Idea 1 + example", hint: "“First…” Develop it, then give ONE concrete example.", seconds: 35 },
+        { label: "Idea 2 + example", hint: "“Then…” Second idea, then an example.", seconds: 35 },
+        { label: "Idea 3 + example", hint: "“Finally…” Third idea, then an example.", seconds: 35 },
+        { label: "Conclusion", hint: "“To sum up…” Restate your three ideas in a single sentence.", seconds: 20 },
+      ],
+    },
+  },
+  {
+    id: "prep",
+    fr: {
+      name: "PREP",
+      tagline: "Pour donner un avis",
+      steps: [
+        { label: "Point — ta position", hint: "Ta réponse en UNE phrase, dès le départ. Pas de mise en contexte.", seconds: 15 },
+        { label: "Raison", hint: "« Parce que… » Une seule raison, la plus forte.", seconds: 30 },
+        { label: "Exemple", hint: "« Par exemple, dans mon cas… » Un fait, un chiffre ou une histoire vécue.", seconds: 40 },
+        { label: "Point — on reboucle", hint: "« C'est pour ça que… » Répète ta position, reformulée.", seconds: 15 },
+      ],
+    },
+    en: {
+      name: "PREP",
+      tagline: "For giving an opinion",
+      steps: [
+        { label: "Point — your position", hint: "Your answer in ONE sentence, right away. No warm-up.", seconds: 15 },
+        { label: "Reason", hint: "“Because…” One single reason, your strongest one.", seconds: 30 },
+        { label: "Example", hint: "“For example, in my case…” A fact, a number or a lived story.", seconds: 40 },
+        { label: "Point — loop back", hint: "“That's why…” Restate your position, reworded.", seconds: 15 },
+      ],
+    },
+  },
+  {
+    id: "star",
+    fr: {
+      name: "STAR",
+      tagline: "Pour les entrevues",
+      steps: [
+        { label: "Situation", hint: "Où, quand, avec qui. Court : deux phrases suffisent.", seconds: 25 },
+        { label: "Tâche", hint: "C'était quoi TON rôle, ta responsabilité précise ?", seconds: 20 },
+        { label: "Action", hint: "Ce que TU as fait, étape par étape. Dis « j'ai », pas « on a ».", seconds: 45 },
+        { label: "Résultat", hint: "L'impact, si possible chiffré. Ne saute JAMAIS cette partie.", seconds: 25 },
+      ],
+    },
+    en: {
+      name: "STAR",
+      tagline: "For interviews",
+      steps: [
+        { label: "Situation", hint: "Where, when, with whom. Keep it short: two sentences.", seconds: 25 },
+        { label: "Task", hint: "What was YOUR role, your specific responsibility?", seconds: 20 },
+        { label: "Action", hint: "What YOU did, step by step. Say “I did”, not “we did”.", seconds: 45 },
+        { label: "Result", hint: "The impact, with numbers if you can. NEVER skip this part.", seconds: 25 },
+      ],
+    },
+  },
+  {
+    id: "probleme",
+    fr: {
+      name: "Problème → Solution",
+      tagline: "Pour convaincre / pitcher",
+      steps: [
+        { label: "Le contexte", hint: "Plante le décor en deux phrases. À qui ça s'adresse ?", seconds: 20 },
+        { label: "Le problème", hint: "Ce qui ne marche pas aujourd'hui, et pourquoi c'est un vrai problème.", seconds: 30 },
+        { label: "Ta solution", hint: "Ce que tu proposes, concrètement. Une idée claire, pas trois.", seconds: 35 },
+        { label: "Le bénéfice + l'appel", hint: "Ce que ça change, puis ce que tu demandes à ton auditoire de faire.", seconds: 25 },
+      ],
+    },
+    en: {
+      name: "Problem → Solution",
+      tagline: "For convincing / pitching",
+      steps: [
+        { label: "Context", hint: "Set the scene in two sentences. Who is this for?", seconds: 20 },
+        { label: "The problem", hint: "What isn't working today, and why it's a real problem.", seconds: 30 },
+        { label: "Your solution", hint: "What you propose, concretely. One clear idea, not three.", seconds: 35 },
+        { label: "Benefit + ask", hint: "What it changes, then what you want your audience to do.", seconds: 25 },
+      ],
+    },
+  },
+];
+
+function getFramework(id) {
+  return FRAMEWORKS.find((f) => f.id === id) || FRAMEWORKS[0];
+}
+
+// ---------------------------------------------------------------------------
+// Marqueurs de structure repérés dans la transcription (note de structure)
+// ---------------------------------------------------------------------------
+const SIGNPOSTS = {
+  fr: {
+    plan: [
+      "trois choses", "trois points", "trois idées", "trois raisons", "trois éléments",
+      "deux choses", "deux points", "deux raisons", "quatre points",
+      "je vois trois", "il y a trois", "je vais vous parler", "je vais te parler",
+      "je vais aborder", "mon plan", "je vais parler de", "on va voir",
+    ],
+    transition: [
+      "premièrement", "deuxièmement", "troisièmement", "d'abord", "tout d'abord",
+      "ensuite", "puis", "par la suite", "enfin", "pour finir", "deuxième point",
+      "troisième point", "premier point", "dernier point", "deuxième chose",
+    ],
+    example: [
+      "par exemple", "concrètement", "notamment", "comme quand", "dans mon cas",
+      "typiquement", "je pense à", "une fois", "j'ai vécu", "prenons",
+    ],
+    conclusion: [
+      "en conclusion", "pour conclure", "en résumé", "pour résumer", "ce que je retiens",
+      "voilà pourquoi", "c'est pour ça que", "au final", "pour terminer", "donc en gros",
+    ],
+  },
+  en: {
+    plan: [
+      "three things", "three points", "three ideas", "three reasons",
+      "two things", "two points", "two reasons", "four points",
+      "i see three", "there are three", "i'm going to talk about",
+      "i will talk about", "my plan", "we'll look at", "i want to cover",
+    ],
+    transition: [
+      "first", "firstly", "second", "secondly", "third", "thirdly",
+      "then", "next", "after that", "finally", "lastly", "to begin with",
+      "my second point", "my third point", "the last point",
+    ],
+    example: [
+      "for example", "for instance", "concretely", "in my case", "specifically",
+      "let's say", "one time", "i remember", "take", "such as",
+    ],
+    conclusion: [
+      "in conclusion", "to conclude", "to sum up", "in summary", "to wrap up",
+      "what i take away", "that's why", "in the end", "so overall", "bottom line",
+    ],
+  },
+};
 
 // ---------------------------------------------------------------------------
 // Helpers de tirage

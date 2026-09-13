@@ -125,6 +125,30 @@
           <p id="promptText" class="prompt-text">Chargement…</p>
           <p id="promptSub" class="prompt-sub" hidden></p>
 
+          <!-- Choix du moule de structure -->
+          <div id="frameworkPicker" class="framework-row" hidden></div>
+
+          <!-- Guide en direct, section par section -->
+          <div id="guideBox" class="guide-box" hidden>
+            <div class="guide-dots" id="guideDots"></div>
+            <p class="guide-step" id="guideStep"></p>
+            <p class="guide-hint" id="guideHint"></p>
+            <div class="guide-bar"><div class="guide-bar-fill" id="guideBarFill"></div></div>
+            <div class="guide-foot">
+              <span class="guide-time" id="guideTime">00:00</span>
+              <button id="nextStep" class="ghost-btn small" type="button" data-i18n="nextStep">Section suivante →</button>
+            </div>
+          </div>
+
+          <!-- Plan en 3 idées, reste affiché pendant l'enregistrement -->
+          <details class="plan-box" id="planBox">
+            <summary data-i18n="planTitle">📝 Mon plan (3 idées)</summary>
+            <p class="hint no-top" data-i18n="planHint">Écris tes idées en mots-clés, pas en phrases. Elles restent affichées pendant que tu parles.</p>
+            <input id="plan1" class="plan-input" type="text" maxlength="80" />
+            <input id="plan2" class="plan-input" type="text" maxlength="80" />
+            <input id="plan3" class="plan-input" type="text" maxlength="80" />
+          </details>
+
           <!-- Téléprompteur (mode lecture) -->
           <div id="teleprompter" class="teleprompter" hidden>
             <div id="teleprompterInner" class="teleprompter-inner"></div>
@@ -181,6 +205,15 @@
             </div>
             <div class="accuracy-track"><div class="accuracy-fill" id="accuracyFill"></div></div>
             <p class="accuracy-note" id="accuracyNote"></p>
+          </div>
+
+          <div id="structureBox" class="accuracy-box" hidden>
+            <div class="accuracy-head">
+              <span class="accuracy-label" data-i18n="structureLabel">Structure de ton discours</span>
+              <span class="accuracy-value" id="structureValue">–</span>
+            </div>
+            <div class="accuracy-track"><div class="accuracy-fill" id="structureFill"></div></div>
+            <ul class="structure-list" id="structureList"></ul>
           </div>
 
           <div class="metrics-grid">

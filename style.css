@@ -140,6 +140,7 @@ h1, h2, h3 { font-family: "Sora", "Plus Jakarta Sans", sans-serif; }
 .ex-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.4; }
 
 .ex-libre { border-left-color: #7c5cff; } .ex-libre .ex-icon { background: #efeaff; }
+.ex-structure { border-left-color: #0ea5b7; } .ex-structure .ex-icon { background: #e0f7fa; }
 .ex-mot { border-left-color: #3b6fe0; } .ex-mot .ex-icon { background: #eaf1ff; }
 .ex-impro { border-left-color: #d97a0a; } .ex-impro .ex-icon { background: #fff4e0; }
 .ex-debat { border-left-color: #e0507a; } .ex-debat .ex-icon { background: #fdeef2; }
@@ -177,6 +178,68 @@ h1, h2, h3 { font-family: "Sora", "Plus Jakarta Sans", sans-serif; }
   letter-spacing: 0.06em; color: var(--danger);
 }
 .prompt-sub { font-size: 13px; color: var(--ink-soft); margin: 0 0 12px; line-height: 1.5; }
+
+/* ---------- Choix du moule de structure ---------- */
+.framework-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 14px; }
+.framework-label { font-size: 12px; font-weight: 700; color: var(--ink-soft); width: 100%; }
+.framework-btn {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 1px;
+  background: #fbfaff; border: 1px solid var(--border); border-radius: 12px; padding: 8px 13px;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.framework-btn strong { font-family: "Sora", sans-serif; font-size: 13px; font-weight: 700; color: var(--ink); }
+.framework-btn small { font-size: 10.5px; color: var(--ink-soft); }
+.framework-btn:hover { transform: translateY(-1px); border-color: var(--accent); }
+.framework-btn.selected { background: var(--brand-grad); border-color: transparent; box-shadow: var(--shadow-soft); }
+.framework-btn.selected strong, .framework-btn.selected small { color: #fff; }
+
+/* ---------- Guide en direct ---------- */
+.guide-box {
+  background: #14102b; color: #f2eeff; border-radius: 18px;
+  padding: 18px 20px; margin-bottom: 14px; box-shadow: var(--shadow-soft);
+}
+.guide-dots { display: flex; gap: 6px; margin-bottom: 12px; }
+.guide-dot { flex: 1; height: 4px; border-radius: 999px; background: rgba(255, 255, 255, 0.16); transition: background 0.3s ease; }
+.guide-dot.done { background: rgba(255, 255, 255, 0.45); }
+.guide-dot.active { background: linear-gradient(90deg, #7c5cff, #ff6fa0); }
+.guide-step { font-family: "Sora", sans-serif; font-size: 19px; font-weight: 800; margin: 0 0 6px; }
+.guide-hint { font-size: 13.5px; margin: 0 0 14px; color: #cfc6ef; line-height: 1.5; }
+.guide-bar { height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.14); overflow: hidden; }
+.guide-bar-fill { height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, #7c5cff, #ff6fa0); transition: width 0.95s linear; }
+.guide-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; }
+.guide-time { font-family: "Sora", sans-serif; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.guide-box .ghost-btn { background: rgba(255, 255, 255, 0.14); color: #fff; border-color: rgba(255, 255, 255, 0.28); }
+.guide-box .ghost-btn:hover { background: rgba(255, 255, 255, 0.26); color: #fff; }
+.guide-box .ghost-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ---------- Plan en 3 idées ---------- */
+.plan-box {
+  background: #fbfaff; border: 1px solid var(--border); border-radius: 14px;
+  padding: 12px 14px; margin-bottom: 14px;
+}
+.plan-box summary { cursor: pointer; font-size: 13.5px; font-weight: 700; color: var(--accent-strong); list-style: none; }
+.plan-box summary::-webkit-details-marker { display: none; }
+.plan-input {
+  width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px;
+  font-family: inherit; font-size: 14px; margin-bottom: 8px; background: #fff;
+}
+.plan-input:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
+.plan-input:last-child { margin-bottom: 2px; }
+
+/* ---------- Note de structure ---------- */
+.structure-list { list-style: none; margin: 12px 0 0; padding: 0; font-size: 13px; }
+.structure-list li { display: flex; gap: 9px; margin-bottom: 9px; line-height: 1.5; }
+.structure-list li.ok { color: #1f6b52; }
+.structure-list li.todo { color: var(--ink); }
+.struct-mark { font-weight: 800; flex-shrink: 0; }
+.structure-list li.ok .struct-mark { color: var(--good); }
+.structure-list li.todo .struct-mark { color: #d97a0a; }
+.struct-tip { color: var(--ink-soft); font-size: 12.5px; }
+.structure-list li em { color: var(--ink-soft); font-style: normal; }
+.structure-list .struct-verdict {
+  display: block; margin: 12px 0 0; padding: 10px 13px; border-radius: 11px;
+  background: var(--accent-soft); color: var(--accent-strong); font-weight: 700; font-size: 12.5px;
+}
 
 /* ---------- Préparation ---------- */
 .prep-box {

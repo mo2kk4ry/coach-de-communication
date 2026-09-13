@@ -50,6 +50,13 @@ const state = {
   improHandle: null,
   tpFrame: null,
 
+  // structure guidée
+  frameworkId: "trois",
+  guideSteps: [],
+  guideIndex: 0,
+  guideRemaining: 0,
+  guideHandle: null,
+
   // séance chronométrée
   session: null,
 };
@@ -98,6 +105,42 @@ function countFillers(text, lang) {
     }
   });
   return { total, found };
+}
+
+// Cherche des marqueurs de structure ("premièrement", "par exemple", "en résumé"…)
+// dans ce qui a été dit, et en tire une note sur 100.
+function analyzeStructure(text, lang) {
+  const flat = " " + text.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/\s+/g, " ") + " ";
+  const sets = SIGNPOSTS[lang] || SIGNPOSTS.fr;
+
+  const hits = (list) =>
+    list.filter((phrase) => {
+      const p = phrase.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+      const escaped = p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      return new RegExp(`(?<![\\p{L}])${escaped}(?![\\p{L}])`, "u").test(flat);
+    });
+
+  const plan = hits(sets.plan);
+  const transition = hits(sets.transition);
+  const example = hits(sets.example);
+  const conclusion = hits(sets.conclusion);
+
+  let score = 0;
+  if (plan.length) score += 30;
+  if (transition.length >= 2) score += 30;
+  else if (transition.length === 1) score += 15;
+  if (example.length) score += 20;
+  if (conclusion.length) score += 20;
+
+  return {
+    score,
+    items: [
+      { key: "structPlan", tip: "structPlanTip", ok: plan.length > 0, found: plan },
+      { key: "structTransitions", tip: "structTransitionsTip", ok: transition.length >= 2, found: transition },
+      { key: "structExample", tip: "structExampleTip", ok: example.length > 0, found: example },
+      { key: "structConclusion", tip: "structConclusionTip", ok: conclusion.length > 0, found: conclusion },
+    ],
+  };
 }
 
 // Mots répétés deux fois de suite ("je je pense") = hésitation
@@ -347,6 +390,7 @@ function resetPracticeUi() {
   $("playbackHint").hidden = true;
   $("timer").textContent = "00:00";
   $("repeatNote").hidden = true;
+  $("structureBox").hidden = true;
   $("paceNote").textContent = "";
   $("fillerNote").textContent = "";
 }
@@ -361,7 +405,10 @@ function loadExerciseContent() {
   state.promptSub = "";
 
   $("exerciseTitle").textContent = `${mode.icon} ${mode[lang].name}`;
-  $("customPromptWrap").hidden = mode.kind !== "topic";
+  $("customPromptWrap").hidden = !(mode.kind === "topic" || mode.kind === "structure");
+  $("frameworkPicker").hidden = mode.kind !== "structure";
+  $("guideBox").hidden = mode.kind !== "structure";
+  resetPlanBox(mode.kind === "structure" || mode.kind === "word" || mode.kind === "debate");
   $("teleprompter").hidden = true;
   $("teleprompterControls").hidden = true;
   $("questionNav").hidden = true;
@@ -374,6 +421,15 @@ function loadExerciseContent() {
     state.currentPrompt = getRandomPrompt(lang);
     $("promptText").textContent = state.currentPrompt;
     setSub(T("instrLibre"));
+  }
+
+  else if (mode.kind === "structure") {
+    state.currentPrompt = getRandomPrompt(lang);
+    $("promptText").textContent = state.currentPrompt;
+    setSub(T("instrStructure"));
+    renderFrameworkPicker();
+    loadGuideSteps();
+    startPrep(mode.prepSeconds);
   }
 
   else if (mode.kind === "word") {
@@ -510,6 +566,110 @@ function stopPrep() {
 }
 
 $("skipPrep").addEventListener("click", stopPrep);
+
+// ---------- Plan en 3 idées ----------
+function resetPlanBox(openIt) {
+  ["plan1", "plan2", "plan3"].forEach((id, i) => {
+    $(id).value = "";
+    $(id).placeholder = T(`plan${i + 1}Placeholder`);
+  });
+  $("planBox").open = !!openIt;
+}
+
+function currentPlan() {
+  return ["plan1", "plan2", "plan3"]
+    .map((id) => $(id).value.trim())
+    .filter(Boolean);
+}
+
+// ---------- Structure guidée : choix du moule ----------
+function renderFrameworkPicker() {
+  const picker = $("frameworkPicker");
+  picker.innerHTML =
+    `<span class="framework-label">${escapeHtml(T("chooseFramework"))}</span>` +
+    FRAMEWORKS.map(
+      (f) => `<button class="framework-btn${f.id === state.frameworkId ? " selected" : ""}" type="button" data-framework="${f.id}">
+        <strong>${escapeHtml(f[state.lang].name)}</strong><small>${escapeHtml(f[state.lang].tagline)}</small>
+      </button>`
+    ).join("");
+  picker.querySelectorAll("[data-framework]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      state.frameworkId = btn.getAttribute("data-framework");
+      renderFrameworkPicker();
+      loadGuideSteps();
+    });
+  });
+}
+
+function loadGuideSteps() {
+  const fw = getFramework(state.frameworkId);
+  state.guideSteps = fw[state.lang].steps;
+  state.guideIndex = 0;
+  state.guideRemaining = state.guideSteps[0].seconds;
+  $("guideBox").hidden = false;
+  renderGuideStep(true);
+}
+
+function renderGuideStep(waiting) {
+  const steps = state.guideSteps;
+  if (!steps.length) return;
+  const step = steps[state.guideIndex];
+
+  $("guideDots").innerHTML = steps
+    .map((s, i) => `<span class="guide-dot${i === state.guideIndex ? " active" : i < state.guideIndex ? " done" : ""}"></span>`)
+    .join("");
+  $("guideStep").textContent = `${state.guideIndex + 1}/${steps.length} · ${step.label}`;
+  $("guideHint").textContent = waiting ? T("guideWaiting") : step.hint;
+  $("guideTime").textContent = formatTime(state.guideRemaining);
+  $("guideBarFill").style.width = waiting ? "0%" : `${100 - (state.guideRemaining / step.seconds) * 100}%`;
+
+  const isLast = state.guideIndex >= steps.length - 1;
+  $("nextStep").disabled = isLast;
+  $("nextStep").textContent = isLast ? T("lastStep") : T("nextStep");
+}
+
+function goToGuideStep(index) {
+  if (index >= state.guideSteps.length) {
+    stopGuide();
+    return;
+  }
+  state.guideIndex = index;
+  state.guideRemaining = state.guideSteps[index].seconds;
+  renderGuideStep(false);
+}
+
+function startGuide() {
+  if (!state.mode || state.mode.kind !== "structure" || !state.guideSteps.length) return;
+  stopGuide(true);
+  goToGuideStep(0);
+  state.guideHandle = setInterval(() => {
+    state.guideRemaining--;
+    if (state.guideRemaining <= 0) {
+      if (state.guideIndex >= state.guideSteps.length - 1) {
+        state.guideRemaining = 0;
+        renderGuideStep(false);
+        clearInterval(state.guideHandle);
+        state.guideHandle = null;
+        return;
+      }
+      goToGuideStep(state.guideIndex + 1);
+    } else {
+      renderGuideStep(false);
+    }
+  }, 1000);
+}
+
+function stopGuide(keepVisible) {
+  clearInterval(state.guideHandle);
+  state.guideHandle = null;
+  if (!keepVisible && (!state.mode || state.mode.kind !== "structure")) {
+    $("guideBox").hidden = true;
+  }
+}
+
+$("nextStep").addEventListener("click", () => {
+  if (state.guideIndex < state.guideSteps.length - 1) goToGuideStep(state.guideIndex + 1);
+});
 
 // ---------- Improvisation : questions qui s'enchaînent ----------
 function startImpro() {
@@ -663,6 +823,7 @@ async function startRecording() {
   startTimer();
   startImpro();
   startTeleprompter();
+  startGuide();
 
   $("recordBtn").setAttribute("aria-pressed", "true");
   $("recordLabel").textContent = T("stopRecording");
@@ -680,6 +841,7 @@ function stopRecording() {
   state.recognizing = false;
   stopTimer();
   stopImpro();
+  stopGuide(true);
   cancelAnimationFrame(state.tpFrame);
 
   $("recordBtn").setAttribute("aria-pressed", "false");
@@ -701,6 +863,7 @@ function stopEverything() {
   clearInterval(state.timerHandle);
   stopPrep();
   stopImpro();
+  stopGuide(true);
   cancelAnimationFrame(state.tpFrame);
 }
 
@@ -768,6 +931,36 @@ function computeAndRenderMetrics() {
         : "A lot of words got lost. Go again more slowly, over-pronouncing everything.";
   } else {
     $("accuracyBox").hidden = true;
+  }
+
+  // Note de structure — sauf en lecture/articulation, où on lit un texte imposé
+  const isReading = state.mode && state.mode.kind === "read";
+  if (text && !isReading && countWords(text) >= 20) {
+    const st = analyzeStructure(text, state.lang);
+    $("structureBox").hidden = false;
+    $("structureValue").textContent = st.score + " / 100";
+    $("structureFill").style.width = st.score + "%";
+    $("structureFill").className = "accuracy-fill" + (st.score >= 80 ? " good" : st.score >= 45 ? " mid" : " low");
+    $("structureList").innerHTML =
+      st.items
+        .map(
+          (it) => `<li class="${it.ok ? "ok" : "todo"}">
+            <span class="struct-mark">${it.ok ? "✓" : "○"}</span>
+            <span><strong>${escapeHtml(T(it.key))}</strong>${
+            it.ok
+              ? it.found.length
+                ? ` <em>— « ${escapeHtml(it.found.slice(0, 3).join(" », « "))} »</em>`
+                : ""
+              : `<br><span class="struct-tip">${escapeHtml(T(it.tip))}</span>`
+          }</span>
+          </li>`
+        )
+        .join("") +
+      `<li class="struct-verdict">${escapeHtml(
+        st.score >= 80 ? T("structGreat") : st.score >= 45 ? T("structOk") : T("structWeak")
+      )}</li>`;
+  } else {
+    $("structureBox").hidden = true;
   }
 
   const paceNote = $("paceNote");
@@ -916,6 +1109,20 @@ Keep it concise, encouraging, never condescending.`;
       state.lang === "fr"
         ? `\n\nObjectif personnel de la personne : ${goalText}`
         : `\n\nThe person's personal goal: ${goalText}`;
+  }
+  if (state.mode && state.mode.kind === "structure") {
+    const fw = getFramework(state.frameworkId)[state.lang];
+    userMessage +=
+      state.lang === "fr"
+        ? `\n\nLa personne devait suivre le moule « ${fw.name} » : ${fw.steps.map((s) => s.label).join(" → ")}. Dis-lui clairement si chaque section y est, et laquelle a sauté.`
+        : `\n\nThey were following the “${fw.name}” template: ${fw.steps.map((s) => s.label).join(" → ")}. Tell them clearly whether each section is there, and which one got skipped.`;
+  }
+  const plan = currentPlan();
+  if (plan.length) {
+    userMessage +=
+      state.lang === "fr"
+        ? `\n\nLe plan qu'elle avait écrit avant de parler : ${plan.join(" / ")}. Dis-lui si elle s'y est tenue.`
+        : `\n\nThe plan they wrote before speaking: ${plan.join(" / ")}. Tell them whether they stuck to it.`;
   }
   userMessage +=
     state.lang === "fr"

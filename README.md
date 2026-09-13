@@ -1,16 +1,35 @@
 # 🎙️ Coach de communication
 
-Une petite app web gratuite et open-source pour pratiquer sa communication orale : choisis un sujet, enregistre-toi, obtiens ta transcription et tes statistiques (débit, mots de remplissage), et — si tu veux — un retour détaillé généré par l'IA Claude.
+**➡️ [Essayer l'app en ligne](https://mo2kk4ry.github.io/coach-de-communication/)**
 
-Projet étudiant, pensé pour être simple à utiliser, gratuit dans sa version de base, et libre d'être copié, modifié ou amélioré par d'autres étudiant·e·s.
+Une app web gratuite et open-source pour pratiquer sa communication orale : choisis un exercice, enregistre-toi, réécoute-toi, obtiens ta transcription et tes statistiques (débit, mots de remplissage, hésitations), et — si tu veux — un retour détaillé généré par l'IA Claude.
+
+Fait par Sanaba, étudiante en analyse de données qui doit améliorer sa communication d'ici la fin de sa session. Pensé pour être simple à utiliser, gratuit dans sa version de base, et libre d'être copié, modifié ou amélioré par d'autres étudiant·e·s.
 
 **[English version below](#-communication-coach-english)**
 
+## 🎲 Les 7 exercices
+
+| Exercice | Ce que tu fais |
+|---|---|
+| 🎯 **Sujet libre** | Un sujet au hasard (ou le tien), tu parles 1 à 2 minutes. |
+| 🔤 **Mot au hasard** | Un mot + sa définition, 60 s de préparation chronométrée, puis tu présentes. |
+| ⚡ **Improvisation rapide** | Des questions courtes qui changent toutes seules toutes les 30 secondes. |
+| 🥊 **Débat** | Une affirmation, un camp tiré au sort (POUR ou CONTRE), 90 s de préparation. |
+| 🎧 **Podcast / Entrevue** | Une série de questions (embauche, technique data, podcast, média, stage). |
+| 👄 **Articulation** | Des virelangues à dire sans s'emmêler, avec un score de précision. |
+| 📜 **Lecture (téléprompteur)** | Un texte qui défile à la vitesse que tu choisis, tu lis à voix haute. |
+
+Chaque exercice vient avec une **mini-leçon** de 3 règles concrètes (structurer en 3 idées, méthode STAR, articuler, etc.).
+
 ## ✨ Fonctionnalités
 
-- Banque de sujets de pratique (FR/EN) ou écris ton propre sujet
-- Enregistrement audio + transcription automatique en direct (Chrome / Edge)
-- Statistiques instantanées et **100 % gratuites**, sans clé API : durée, mots par minute, mots de remplissage
+- 7 types d'exercices, tous bilingues FR/EN
+- **Séances chronométrées** de 15, 30, 45 ou 60 minutes (ou mode libre), avec récapitulatif à la fin
+- Enregistrement audio + **réécoute de ta propre voix** + transcription automatique en direct (Chrome / Edge)
+- Statistiques instantanées et **100 % gratuites**, sans clé API : durée, mots par minute, mots de remplissage, répétitions/hésitations
+- **Score de précision de lecture** pour les modes articulation et téléprompteur (comparaison mot à mot avec le texte cible)
+- Objectif personnel + **série de jours consécutifs** et minutes parlées cumulées
 - Retour détaillé optionnel généré par Claude (IA) — nécessite ta propre clé API Anthropic
 - Historique de tes sessions précédentes (sauvegardé uniquement dans ton navigateur)
 - Aucune inscription, aucun compte, aucun serveur : tout tourne dans ton navigateur
@@ -19,7 +38,7 @@ Projet étudiant, pensé pour être simple à utiliser, gratuit dans sa version 
 
 ### Option 1 — en ligne (le plus simple)
 
-Une fois publiée sur GitHub Pages, ouvre simplement le lien fourni par la personne qui héberge le projet.
+Ouvre **https://mo2kk4ry.github.io/coach-de-communication/** — c'est tout.
 
 ### Option 2 — sur ton ordinateur
 
@@ -31,7 +50,7 @@ Une fois publiée sur GitHub Pages, ouvre simplement le lien fourni par la perso
 
 ## 🔑 Le retour IA (optionnel, payant à l'usage)
 
-Les statistiques de base (durée, débit, mots de remplissage) sont **toujours gratuites** et ne nécessitent rien de plus.
+Les statistiques de base (durée, débit, mots de remplissage, précision de lecture) sont **toujours gratuites** et ne nécessitent rien de plus.
 
 Pour débloquer un retour détaillé et personnalisé généré par Claude :
 
@@ -48,7 +67,7 @@ Pas besoin de ligne de commande — tout se fait depuis le site web de GitHub.
 
 1. Sur GitHub, crée un nouveau dépôt (repository), par exemple `coach-de-communication`. Laisse-le public si tu veux que d'autres puissent l'utiliser et contribuer.
 2. Dans ton nouveau dépôt, clique sur **"uploading an existing file"** (ou "Add file" → "Upload files").
-3. Glisse-dépose les 5 fichiers du projet : `index.html`, `style.css`, `app.js`, `i18n.js`, `prompts.js` (et ce `README.md`, `LICENSE` si tu veux).
+3. Glisse-dépose les 6 fichiers du projet : `index.html`, `style.css`, `app.js`, `i18n.js`, `prompts.js`, `exercises.js` (et ce `README.md`, `LICENSE` si tu veux).
 4. Clique sur **"Commit changes"**.
 5. Va dans **Settings** (du dépôt) → **Pages** (dans le menu de gauche).
 6. Sous "Build and deployment", choisis **Source : Deploy from a branch**, puis **Branch : main** et dossier **/ (root)**. Sauvegarde.
@@ -59,17 +78,18 @@ Pas besoin de ligne de commande — tout se fait depuis le site web de GitHub.
 
 Ce projet est fait pour grandir. Quelques idées d'améliorations bienvenues :
 
+- Ajouter des sujets, des mots de vocabulaire, des virelangues ou des textes de lecture dans `exercises.js`
 - Ajouter plus de sujets de pratique dans `prompts.js`
 - Ajouter une nouvelle langue dans `i18n.js`
 - Améliorer la détection des mots de remplissage pour d'autres accents/dialectes
-- Ajouter un mode "entretien d'embauche" avec des questions de suivi générées par l'IA
+- Créer un nouveau type d'exercice (il suffit d'ajouter une entrée dans `EXERCISE_MODES`)
 
 N'hésite pas à ouvrir une *issue* ou une *pull request* sur GitHub.
 
 ## 🔒 Confidentialité
 
 - Rien n'est envoyé à un serveur, sauf si tu demandes explicitement un retour IA (dans ce cas, seul le texte de ta transcription et le sujet sont envoyés à l'API d'Anthropic — jamais ton audio).
-- Ta clé API et ton historique de sessions sont stockés uniquement dans ton navigateur (`localStorage`). Si tu changes de navigateur ou d'appareil, ton historique ne te suit pas.
+- Ta clé API, ton objectif, tes statistiques et ton historique sont stockés uniquement dans ton navigateur (`localStorage`). Si tu changes de navigateur ou d'appareil, ils ne te suivent pas.
 - L'enregistrement audio reste dans ton navigateur et n'est jamais téléversé nulle part.
 
 ## 📄 Licence
@@ -80,15 +100,34 @@ Ce projet est sous licence MIT — libre d'utilisation, de modification et de pa
 
 # 🎙️ Communication Coach (English)
 
-A free, open-source web app to practice spoken communication: pick a topic, record yourself, get a transcript and instant stats (pace, filler words), and optionally a detailed AI-generated feedback from Claude.
+**➡️ [Try the app online](https://mo2kk4ry.github.io/coach-de-communication/)**
 
-Student project, built to be simple to use, free at its core, and free for other students to copy, modify, or improve.
+A free, open-source web app to practice spoken communication: pick an exercise, record yourself, play yourself back, get a transcript and instant stats (pace, filler words, hesitations), and optionally detailed AI-generated feedback from Claude.
+
+Made by Sanaba, a data analytics student working on her communication before the end of her semester. Built to be simple to use, free at its core, and free for other students to copy, modify, or improve.
+
+## 🎲 The 7 exercises
+
+| Exercise | What you do |
+|---|---|
+| 🎯 **Free topic** | A random topic (or your own), you speak for 1–2 minutes. |
+| 🔤 **Random word** | A word plus its definition, a 60 s timed prep, then you present. |
+| ⚡ **Rapid fire** | Short questions that change on their own every 30 seconds. |
+| 🥊 **Debate** | A statement and a randomly assigned side (FOR or AGAINST), 90 s of prep. |
+| 🎧 **Podcast / Interview** | A set of questions (hiring, data technical, podcast, media, internship). |
+| 👄 **Articulation** | Tongue twisters to say without tripping up, with an accuracy score. |
+| 📜 **Reading (teleprompter)** | Text scrolling at the speed you choose, you read it out loud. |
+
+Every exercise comes with a **mini-lesson**: 3 concrete rules (structure in 3 ideas, the STAR method, articulation, and so on).
 
 ## ✨ Features
 
-- Bank of practice prompts (FR/EN), or write your own
-- Audio recording + live automatic transcription (Chrome / Edge)
-- Instant, **100% free** stats, no API key needed: duration, words per minute, filler words
+- 7 exercise types, all bilingual FR/EN
+- **Timed sessions** of 15, 30, 45 or 60 minutes (or free mode), with an end-of-session recap
+- Audio recording + **playback of your own voice** + live automatic transcription (Chrome / Edge)
+- Instant, **100% free** stats, no API key needed: duration, words per minute, filler words, repetitions/hesitations
+- **Reading accuracy score** for the articulation and teleprompter modes (word-by-word comparison with the target text)
+- Personal goal + **daily streak** and total minutes spoken
 - Optional detailed AI feedback powered by Claude — requires your own Anthropic API key
 - History of past sessions (saved only in your browser)
 - No sign-up, no account, no server: everything runs in your browser
@@ -97,7 +136,7 @@ Student project, built to be simple to use, free at its core, and free for other
 
 ### Option 1 — online (easiest)
 
-Once published on GitHub Pages, just open the link shared by whoever is hosting the project.
+Open **https://mo2kk4ry.github.io/coach-de-communication/** — that's it.
 
 ### Option 2 — on your computer
 
@@ -109,7 +148,7 @@ Once published on GitHub Pages, just open the link shared by whoever is hosting 
 
 ## 🔑 AI feedback (optional, pay-per-use)
 
-The core stats (duration, pace, filler words) are **always free** and need nothing extra.
+The core stats (duration, pace, filler words, reading accuracy) are **always free** and need nothing extra.
 
 To unlock detailed, personalized feedback from Claude:
 
@@ -126,7 +165,7 @@ No command line needed — everything can be done from the GitHub website.
 
 1. On GitHub, create a new repository, e.g. `communication-coach`. Keep it public if you want others to use it and contribute.
 2. In your new repo, click **"uploading an existing file"** (or "Add file" → "Upload files").
-3. Drag and drop the 5 project files: `index.html`, `style.css`, `app.js`, `i18n.js`, `prompts.js` (plus this `README.md` and `LICENSE` if you like).
+3. Drag and drop the 6 project files: `index.html`, `style.css`, `app.js`, `i18n.js`, `prompts.js`, `exercises.js` (plus this `README.md` and `LICENSE` if you like).
 4. Click **"Commit changes"**.
 5. Go to the repo's **Settings** → **Pages** (left-hand menu).
 6. Under "Build and deployment", choose **Source: Deploy from a branch**, then **Branch: main**, folder **/ (root)**. Save.
@@ -137,17 +176,18 @@ No command line needed — everything can be done from the GitHub website.
 
 This project is meant to grow. A few welcome ideas:
 
+- Add topics, vocabulary words, tongue twisters or reading texts to `exercises.js`
 - Add more practice prompts to `prompts.js`
 - Add a new language in `i18n.js`
 - Improve filler-word detection for other accents/dialects
-- Add a "job interview" mode with AI-generated follow-up questions
+- Create a new exercise type (just add an entry to `EXERCISE_MODES`)
 
 Feel free to open an issue or a pull request on GitHub.
 
 ## 🔒 Privacy
 
 - Nothing is sent to a server unless you explicitly request AI feedback (in which case only your transcript text and the topic are sent to Anthropic's API — never your audio).
-- Your API key and session history are stored only in your browser (`localStorage`). They won't follow you to a different browser or device.
+- Your API key, goal, stats and history are stored only in your browser (`localStorage`). They won't follow you to a different browser or device.
 - Audio recordings stay in your browser and are never uploaded anywhere.
 
 ## 📄 License

@@ -18,116 +18,248 @@
         <span class="brand-mark">🎙️</span>
         <div>
           <h1>Coach de communication</h1>
-          <p class="tagline">Pratique. Enregistre. Progresse.</p>
+          <p class="tagline" data-i18n="tagline">Pratique. Enregistre. Progresse.</p>
         </div>
       </div>
       <div class="topbar-actions">
         <button id="langToggle" class="ghost-btn" type="button" title="Changer la langue">FR / EN</button>
-        <button id="settingsBtn" class="ghost-btn" type="button" title="Paramètres">⚙️ Réglages</button>
+        <button id="settingsBtn" class="ghost-btn" type="button" title="Paramètres">⚙️</button>
       </div>
     </header>
 
+    <!-- Bandeau de session chronométrée -->
+    <div id="sessionBar" class="session-bar" hidden>
+      <div class="session-bar-main">
+        <span class="session-dot"></span>
+        <span id="sessionBarText"></span>
+      </div>
+      <div class="session-bar-right">
+        <span id="sessionBarTime" class="session-time">00:00</span>
+        <button id="endSessionBtn" class="ghost-btn small" type="button" data-i18n="endSession">Terminer</button>
+      </div>
+    </div>
+
     <main>
-      <!-- STEP 1: Prompt -->
-      <section class="card" id="promptCard">
-        <div class="card-head">
-          <h2 data-i18n="promptTitle">Choisis un sujet à pratiquer</h2>
-          <button id="shufflePrompt" class="ghost-btn small" type="button" data-i18n="shuffle">🎲 Un autre sujet</button>
-        </div>
-        <p id="promptText" class="prompt-text">Chargement…</p>
-        <details class="custom-prompt">
-          <summary data-i18n="ownTopic">Écrire mon propre sujet</summary>
-          <textarea id="customPrompt" rows="2" placeholder="Ex. Présente-toi en 60 secondes pour un poste en analyse de données."></textarea>
-          <button id="useCustomPrompt" class="secondary-btn" type="button" data-i18n="useThis">Utiliser ce sujet</button>
-        </details>
-      </section>
 
-      <!-- STEP 2: Record -->
-      <section class="card" id="recordCard">
-        <h2 data-i18n="recordTitle">Enregistre-toi</h2>
-        <div class="recorder">
-          <button id="recordBtn" class="record-btn" type="button" aria-pressed="false">
-            <span class="dot"></span>
-            <span id="recordLabel" data-i18n="startRecording">Commencer</span>
-          </button>
-          <div class="timer" id="timer">00:00</div>
-        </div>
-        <p class="hint" id="micHint" data-i18n="micHint">Le micro reste privé : rien n'est envoyé nulle part sans ton accord, sauf si tu demandes un retour IA.</p>
-        <audio id="playback" controls hidden></audio>
-      </section>
+      <!-- ================= ÉCRAN D'ACCUEIL ================= -->
+      <div id="homeScreen">
 
-      <!-- STEP 3: Transcript -->
-      <section class="card" id="transcriptCard" hidden>
-        <h2 data-i18n="transcriptTitle">Ce que tu as dit</h2>
-        <div id="transcriptBox" class="transcript-box" contenteditable="true" spellcheck="false"></div>
-        <p class="hint" data-i18n="editHint">Tu peux corriger le texte si la transcription automatique s'est trompée.</p>
-      </section>
+        <!-- Choix de l'objectif (premier lancement / modifiable) -->
+        <section class="card" id="goalCard" hidden>
+          <h2 data-i18n="goalTitle">Sur quoi veux-tu travailler ?</h2>
+          <p class="hint" data-i18n="goalHint">Ça sert juste à te rappeler pourquoi tu pratiques. Tu pourras le changer quand tu veux.</p>
+          <div class="goal-grid" id="goalGrid"></div>
+        </section>
 
-      <!-- STEP 4: Quick metrics (always free, no API needed) -->
-      <section class="card" id="metricsCard" hidden>
-        <h2 data-i18n="metricsTitle">Aperçu rapide</h2>
-        <div class="metrics-grid">
-          <div class="metric metric--duration">
-            <span class="metric-icon">⏱️</span>
-            <span class="metric-value" id="mDuration">–</span>
-            <span class="metric-label" data-i18n="mDurationLabel">Durée</span>
+        <!-- Progression -->
+        <section class="card stats-card" id="statsCard">
+          <div class="stats-row">
+            <div class="stat">
+              <span class="stat-value" id="statStreak">0</span>
+              <span class="stat-label" data-i18n="statStreak">jours d'affilée</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value" id="statSessions">0</span>
+              <span class="stat-label" data-i18n="statSessions">pratiques</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value" id="statMinutes">0</span>
+              <span class="stat-label" data-i18n="statMinutes">min parlées</span>
+            </div>
           </div>
-          <div class="metric metric--wpm">
-            <span class="metric-icon">⚡</span>
-            <span class="metric-value" id="mWpm">–</span>
-            <span class="metric-label" data-i18n="mWpmLabel">Mots / minute</span>
+          <div class="goal-line">
+            <span id="goalLine"></span>
+            <button id="changeGoal" class="ghost-btn small" type="button" data-i18n="changeGoal">Changer</button>
           </div>
-          <div class="metric metric--words">
-            <span class="metric-icon">💬</span>
-            <span class="metric-value" id="mWords">–</span>
-            <span class="metric-label" data-i18n="mWordsLabel">Mots au total</span>
+        </section>
+
+        <!-- Durée de session -->
+        <section class="card">
+          <div class="card-head">
+            <h2 data-i18n="sessionTitle">Durée de ta séance</h2>
           </div>
-          <div class="metric metric--fillers">
-            <span class="metric-icon">🔁</span>
-            <span class="metric-value" id="mFillers">–</span>
-            <span class="metric-label" data-i18n="mFillersLabel">Mots de remplissage</span>
+          <p class="hint no-top" data-i18n="sessionHint">Choisis un temps et enchaîne les exercices jusqu'à ce que le chrono sonne — ou reste en mode libre.</p>
+          <div class="duration-row" id="durationRow"></div>
+        </section>
+
+        <!-- Grille d'exercices -->
+        <section class="card">
+          <div class="card-head">
+            <h2 data-i18n="chooseExercise">Choisis ton exercice</h2>
           </div>
-        </div>
-        <p id="paceNote" class="pace-note"></p>
-        <p id="fillerNote" class="filler-note"></p>
-      </section>
+          <div class="exercise-grid" id="exerciseGrid"></div>
+        </section>
 
-      <!-- STEP 5: AI feedback (optional, needs API key) -->
-      <section class="card" id="aiCard" hidden>
-        <div class="card-head">
-          <h2 data-i18n="aiTitle">Retour détaillé (IA)</h2>
-        </div>
-        <div id="aiKeyMissing" class="notice">
-          <span data-i18n="noKeyNotice">Ajoute ta clé API Claude dans les Réglages pour débloquer un retour détaillé et personnalisé.</span>
-          <button id="openSettingsFromNotice" class="secondary-btn" type="button" data-i18n="openSettings">Ouvrir les réglages</button>
-        </div>
-        <button id="getFeedbackBtn" class="primary-btn" type="button" hidden data-i18n="getFeedback">✨ Obtenir mon retour</button>
-        <div id="aiLoading" class="ai-loading" hidden><span class="spinner"></span> <span data-i18n="thinking">Claude réfléchit à ton retour…</span></div>
-        <div id="aiResult" class="ai-result" hidden></div>
-      </section>
+        <!-- Historique -->
+        <section class="card" id="historyCard">
+          <div class="card-head">
+            <h2 data-i18n="historyTitle">Mes sessions précédentes</h2>
+            <button id="clearHistory" class="ghost-btn small" type="button" data-i18n="clearHistory">Tout effacer</button>
+          </div>
+          <div id="historyList" class="history-list">
+            <p class="empty-state" data-i18n="noHistory">Pas encore de session. Ta première pratique apparaîtra ici.</p>
+          </div>
+        </section>
 
-      <!-- History -->
-      <section class="card" id="historyCard">
-        <div class="card-head">
-          <h2 data-i18n="historyTitle">Mes sessions précédentes</h2>
-          <button id="clearHistory" class="ghost-btn small" type="button" data-i18n="clearHistory">Tout effacer</button>
-        </div>
-        <div id="historyList" class="history-list">
-          <p class="empty-state" data-i18n="noHistory">Pas encore de session. Ta première pratique apparaîtra ici.</p>
-        </div>
-      </section>
+      </div>
 
-      <div class="actions-row">
-        <button id="newSessionBtn" class="secondary-btn" type="button" hidden data-i18n="newSession">↻ Nouvelle session</button>
+      <!-- ================= ÉCRAN DE PRATIQUE ================= -->
+      <div id="practiceScreen" hidden>
+
+        <button id="backHome" class="back-link" type="button" data-i18n="backHome">← Tous les exercices</button>
+
+        <!-- Consigne / contenu de l'exercice -->
+        <section class="card" id="exerciseCard">
+          <div class="card-head">
+            <h2 id="exerciseTitle">Exercice</h2>
+            <button id="shufflePrompt" class="ghost-btn small" type="button" data-i18n="shuffle">🎲 Un autre</button>
+          </div>
+
+          <!-- Compte à rebours de préparation -->
+          <div id="prepBox" class="prep-box" hidden>
+            <p class="prep-label" data-i18n="prepLabel">Préparation — note tes idées, ne parle pas encore</p>
+            <div class="prep-time" id="prepTime">01:00</div>
+            <button id="skipPrep" class="secondary-btn" type="button" data-i18n="skipPrep">Je suis prêt·e →</button>
+          </div>
+
+          <p id="promptText" class="prompt-text">Chargement…</p>
+          <p id="promptSub" class="prompt-sub" hidden></p>
+
+          <!-- Téléprompteur (mode lecture) -->
+          <div id="teleprompter" class="teleprompter" hidden>
+            <div id="teleprompterInner" class="teleprompter-inner"></div>
+          </div>
+          <div id="teleprompterControls" class="tp-controls" hidden>
+            <label class="tp-speed-label" for="tpSpeed" data-i18n="tpSpeed">Vitesse de défilement</label>
+            <input id="tpSpeed" type="range" min="60" max="220" value="140" step="10" />
+            <span id="tpSpeedValue" class="tp-speed-value">140</span>
+          </div>
+
+          <!-- Navigation entre questions (impro / entrevue) -->
+          <div id="questionNav" class="question-nav" hidden>
+            <span id="questionCounter" class="question-counter"></span>
+            <button id="nextQuestion" class="secondary-btn" type="button" data-i18n="nextQuestion">Question suivante →</button>
+          </div>
+
+          <details class="custom-prompt" id="customPromptWrap">
+            <summary data-i18n="ownTopic">Écrire mon propre sujet</summary>
+            <textarea id="customPrompt" rows="2" placeholder="Ex. Présente-toi en 60 secondes pour un poste en analyse de données."></textarea>
+            <button id="useCustomPrompt" class="secondary-btn" type="button" data-i18n="useThis">Utiliser ce sujet</button>
+          </details>
+        </section>
+
+        <!-- Enregistrement -->
+        <section class="card" id="recordCard">
+          <h2 data-i18n="recordTitle">Enregistre-toi</h2>
+          <div class="recorder">
+            <button id="recordBtn" class="record-btn" type="button" aria-pressed="false">
+              <span class="dot"></span>
+              <span id="recordLabel" data-i18n="startRecording">Commencer</span>
+            </button>
+            <div class="timer" id="timer">00:00</div>
+          </div>
+          <p class="hint" id="micHint" data-i18n="micHint">Le micro reste privé : rien n'est envoyé nulle part sans ton accord, sauf si tu demandes un retour IA.</p>
+          <audio id="playback" controls hidden></audio>
+          <p class="hint" id="playbackHint" data-i18n="playbackHint" hidden>Réécoute-toi : c'est là qu'on entend ses vrais tics de langage.</p>
+        </section>
+
+        <!-- Transcription -->
+        <section class="card" id="transcriptCard" hidden>
+          <h2 data-i18n="transcriptTitle">Ce que tu as dit</h2>
+          <div id="transcriptBox" class="transcript-box" contenteditable="true" spellcheck="false"></div>
+          <p class="hint" data-i18n="editHint">Tu peux corriger le texte si la transcription automatique s'est trompée.</p>
+        </section>
+
+        <!-- Statistiques -->
+        <section class="card" id="metricsCard" hidden>
+          <h2 data-i18n="metricsTitle">Aperçu rapide</h2>
+
+          <div id="accuracyBox" class="accuracy-box" hidden>
+            <div class="accuracy-head">
+              <span class="accuracy-label" data-i18n="accuracyLabel">Précision de lecture</span>
+              <span class="accuracy-value" id="accuracyValue">–</span>
+            </div>
+            <div class="accuracy-track"><div class="accuracy-fill" id="accuracyFill"></div></div>
+            <p class="accuracy-note" id="accuracyNote"></p>
+          </div>
+
+          <div class="metrics-grid">
+            <div class="metric metric--duration">
+              <span class="metric-icon">⏱️</span>
+              <span class="metric-value" id="mDuration">–</span>
+              <span class="metric-label" data-i18n="mDurationLabel">Durée</span>
+            </div>
+            <div class="metric metric--wpm">
+              <span class="metric-icon">⚡</span>
+              <span class="metric-value" id="mWpm">–</span>
+              <span class="metric-label" data-i18n="mWpmLabel">Mots / minute</span>
+            </div>
+            <div class="metric metric--words">
+              <span class="metric-icon">💬</span>
+              <span class="metric-value" id="mWords">–</span>
+              <span class="metric-label" data-i18n="mWordsLabel">Mots au total</span>
+            </div>
+            <div class="metric metric--fillers">
+              <span class="metric-icon">🔁</span>
+              <span class="metric-value" id="mFillers">–</span>
+              <span class="metric-label" data-i18n="mFillersLabel">Mots de remplissage</span>
+            </div>
+          </div>
+          <p id="paceNote" class="pace-note"></p>
+          <p id="fillerNote" class="filler-note"></p>
+          <p id="repeatNote" class="filler-note" hidden></p>
+        </section>
+
+        <!-- Mini-leçon -->
+        <section class="card lesson-card" id="lessonCard">
+          <div class="card-head">
+            <h2><span class="lesson-badge" data-i18n="lessonBadge">Mini-leçon</span> <span id="lessonTitle"></span></h2>
+          </div>
+          <ol class="lesson-list" id="lessonList"></ol>
+        </section>
+
+        <!-- Retour IA -->
+        <section class="card" id="aiCard" hidden>
+          <div class="card-head">
+            <h2 data-i18n="aiTitle">Retour détaillé (IA)</h2>
+          </div>
+          <div id="aiKeyMissing" class="notice">
+            <span data-i18n="noKeyNotice">Ajoute ta clé API Claude dans les Réglages pour débloquer un retour détaillé et personnalisé.</span>
+            <button id="openSettingsFromNotice" class="secondary-btn" type="button" data-i18n="openSettings">Ouvrir les réglages</button>
+          </div>
+          <button id="getFeedbackBtn" class="primary-btn" type="button" hidden data-i18n="getFeedback">✨ Obtenir mon retour</button>
+          <div id="aiLoading" class="ai-loading" hidden><span class="spinner"></span> <span data-i18n="thinking">Claude réfléchit à ton retour…</span></div>
+          <div id="aiResult" class="ai-result" hidden></div>
+        </section>
+
+        <div class="actions-row">
+          <button id="newSessionBtn" class="secondary-btn" type="button" hidden data-i18n="newSession">↻ Refaire un tour</button>
+        </div>
+
       </div>
     </main>
 
     <footer>
-      <p data-i18n="footerNote">Projet étudiant open-source — fait pour aider d'autres étudiants à pratiquer leur communication.</p>
+      <p class="credit" data-i18n="credit">Fait par Sanaba, étudiante en analyse de données qui doit améliorer sa communication d'ici la fin de sa session. 💜</p>
+      <p data-i18n="footerNote">Projet open-source — libre d'être copié, modifié et amélioré par n'importe quel·le étudiant·e.</p>
     </footer>
   </div>
 
-  <!-- Settings modal -->
+  <!-- Récapitulatif de fin de séance -->
+  <div id="recapModal" class="modal" hidden>
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 data-i18n="recapTitle">Séance terminée 🎉</h2>
+        <button id="closeRecap" class="ghost-btn" type="button" aria-label="Fermer">✕</button>
+      </div>
+      <div id="recapBody" class="recap-body"></div>
+      <div class="modal-buttons">
+        <button id="recapDone" class="primary-btn" type="button" data-i18n="recapDone">Super, merci !</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Réglages -->
   <div id="settingsModal" class="modal" hidden>
     <div class="modal-card">
       <div class="modal-head">
@@ -137,9 +269,9 @@
       <label class="field-label" for="apiKeyInput" data-i18n="apiKeyLabel">Clé API Claude (Anthropic)</label>
       <input id="apiKeyInput" type="password" placeholder="sk-ant-..." autocomplete="off" />
       <p class="hint" data-i18n="apiKeyHint">
-        Ta clé reste uniquement dans ton navigateur (jamais envoyée ailleurs qu'à l'API d'Anthropic). Crée-en une gratuitement sur
-        <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a> — l'utilisation de l'API est payante à l'usage (quelques sous par session).
+        Ta clé reste uniquement dans ton navigateur (jamais envoyée ailleurs qu'à l'API d'Anthropic). Crée-en une sur
       </p>
+      <p class="hint no-top"><a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a></p>
       <div class="modal-buttons">
         <button id="saveApiKey" class="primary-btn" type="button" data-i18n="save">Enregistrer</button>
         <button id="removeApiKey" class="ghost-btn" type="button" data-i18n="removeKey">Retirer ma clé</button>
@@ -149,6 +281,7 @@
 
   <script src="i18n.js"></script>
   <script src="prompts.js"></script>
+  <script src="exercises.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

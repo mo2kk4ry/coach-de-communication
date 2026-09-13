@@ -40,6 +40,7 @@ const state = {
   mediaStream: null,
   mediaRecorder: null,
   audioChunks: [],
+  playbackUrl: null,
   startTime: null,
   timerHandle: null,
   lastDurationSeconds: 0,
@@ -386,8 +387,7 @@ function resetPracticeUi() {
   $("aiResult").hidden = true;
   $("aiResult").innerHTML = "";
   $("newSessionBtn").hidden = true;
-  $("playback").hidden = true;
-  $("playbackHint").hidden = true;
+  resetPlayback();
   $("timer").textContent = "00:00";
   $("repeatNote").hidden = true;
   $("structureBox").hidden = true;
@@ -726,6 +726,62 @@ function startTeleprompter() {
   state.tpFrame = requestAnimationFrame(frame);
 }
 
+// ---------- Audio : micro, format, lecture ----------
+
+// Tous les navigateurs n'enregistrent pas le même format. Safari refuse le webm,
+// Chrome/Edge refusent le mp4 : on demande le premier format réellement supporté.
+function pickAudioMimeType() {
+  const candidates = [
+    "audio/webm;codecs=opus",
+    "audio/webm",
+    "audio/mp4",
+    "audio/ogg;codecs=opus",
+  ];
+  if (!window.MediaRecorder || !MediaRecorder.isTypeSupported) return "";
+  for (const type of candidates) {
+    if (MediaRecorder.isTypeSupported(type)) return type;
+  }
+  return "";
+}
+
+// Coupe le micro pour de bon (le voyant rouge de l'onglet s'éteint).
+function releaseMic() {
+  if (state.mediaStream) {
+    state.mediaStream.getTracks().forEach((track) => track.stop());
+    state.mediaStream = null;
+  }
+}
+
+// Vide le lecteur audio et libère l'ancien enregistrement de la mémoire.
+// Sans ça, après « Refaire un tour » le lecteur gardait l'ancienne URL, déjà
+// invalide, et ne jouait plus rien.
+function resetPlayback() {
+  const playback = $("playback");
+  try { playback.pause(); } catch (e) { /* ignore */ }
+  playback.removeAttribute("src");
+  playback.load();
+  playback.hidden = true;
+  $("playbackHint").hidden = true;
+  if (state.playbackUrl) {
+    URL.revokeObjectURL(state.playbackUrl);
+    state.playbackUrl = null;
+  }
+}
+
+// Chrome n'écrit pas la durée dans les fichiers webm qu'il enregistre :
+// le lecteur affiche alors une durée infinie et la barre de progression est
+// bloquée. On force le navigateur à la recalculer une fois le fichier chargé.
+function fixAudioDuration(playback) {
+  if (playback.duration !== Infinity) return;
+  playback.currentTime = 1e101;
+  playback.ontimeupdate = () => {
+    playback.ontimeupdate = null;
+    playback.currentTime = 0;
+  };
+}
+
+$("playback").addEventListener("loadedmetadata", () => fixAudioDuration($("playback")));
+
 // ---------- Enregistrement + transcription ----------
 const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -763,6 +819,20 @@ function buildRecognition() {
   return recognition;
 }
 
+// Coupe la reconnaissance vocale pour de bon. Sans détacher onend, Chrome
+// relançait une nouvelle instance juste après l'arrêt : la reconnaissance
+// reprenait le micro dans le dos de l'utilisateur et l'enregistrement suivant
+// se retrouvait sans son.
+function stopRecognition() {
+  if (!state.recognition) return;
+  state.recognition.onend = null;
+  state.recognition.onresult = null;
+  state.recognition.onerror = null;
+  try { state.recognition.stop(); } catch (e) { /* ignore */ }
+  try { state.recognition.abort(); } catch (e) { /* ignore */ }
+  state.recognition = null;
+}
+
 function renderTranscript() {
   $("transcriptBox").textContent = (state.finalTranscript + state.interimTranscript).trim();
 }
@@ -793,18 +863,41 @@ async function startRecording() {
   }
 
   stopPrep();
+  resetPlayback();
 
   state.audioChunks = [];
-  state.mediaRecorder = new MediaRecorder(state.mediaStream);
-  state.mediaRecorder.ondataavailable = (e) => state.audioChunks.push(e.data);
+  const mimeType = pickAudioMimeType();
+  state.mediaRecorder = mimeType
+    ? new MediaRecorder(state.mediaStream, { mimeType })
+    : new MediaRecorder(state.mediaStream);
+
+  state.mediaRecorder.ondataavailable = (e) => {
+    if (e.data && e.data.size > 0) state.audioChunks.push(e.data);
+  };
+
   state.mediaRecorder.onstop = () => {
-    const blob = new Blob(state.audioChunks, { type: "audio/webm" });
+    // On ne coupe le micro qu'ICI : si on arrêtait le flux avant que le
+    // recorder ait rendu son dernier morceau, le fichier sortait vide et la
+    // lecture ne démarrait jamais. C'était le bug principal.
+    releaseMic();
+
+    if (!state.audioChunks.length) return;
+    const blob = new Blob(state.audioChunks, {
+      type: state.mediaRecorder.mimeType || mimeType || "audio/webm",
+    });
+    if (!blob.size) return;
+
+    state.playbackUrl = URL.createObjectURL(blob);
     const playback = $("playback");
-    playback.src = URL.createObjectURL(blob);
+    playback.src = state.playbackUrl;
+    playback.load();
     playback.hidden = false;
     $("playbackHint").hidden = false;
   };
-  state.mediaRecorder.start();
+
+  // Un morceau par seconde : même si quelque chose se passe mal à l'arrêt,
+  // l'enregistrement déjà capté n'est pas perdu.
+  state.mediaRecorder.start(1000);
 
   state.finalTranscript = "";
   state.interimTranscript = "";
@@ -834,11 +927,17 @@ async function startRecording() {
 }
 
 function stopRecording() {
-  if (state.mediaRecorder && state.mediaRecorder.state !== "inactive") state.mediaRecorder.stop();
-  if (state.mediaStream) state.mediaStream.getTracks().forEach((tr) => tr.stop());
-  if (state.recognition) { try { state.recognition.stop(); } catch (e) {} }
-
+  // Le drapeau d'abord : sinon recognition.onend croit que l'enregistrement
+  // continue et relance la reconnaissance vocale toute seule.
   state.recognizing = false;
+
+  if (state.mediaRecorder && state.mediaRecorder.state !== "inactive") {
+    state.mediaRecorder.stop(); // c'est onstop qui libérera le micro
+  } else {
+    releaseMic();
+  }
+  stopRecognition();
+
   stopTimer();
   stopImpro();
   stopGuide(true);
@@ -853,13 +952,15 @@ function stopRecording() {
 
 function stopEverything() {
   if (state.recognizing) {
-    if (state.mediaRecorder && state.mediaRecorder.state !== "inactive") state.mediaRecorder.stop();
-    if (state.mediaStream) state.mediaStream.getTracks().forEach((tr) => tr.stop());
-    if (state.recognition) { try { state.recognition.stop(); } catch (e) {} }
     state.recognizing = false;
+    if (state.mediaRecorder && state.mediaRecorder.state !== "inactive") {
+      state.mediaRecorder.stop();
+    }
+    stopRecognition();
     $("recordBtn").setAttribute("aria-pressed", "false");
     $("recordLabel").textContent = T("startRecording");
   }
+  releaseMic();
   clearInterval(state.timerHandle);
   stopPrep();
   stopImpro();

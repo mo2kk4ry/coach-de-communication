@@ -145,19 +145,13 @@ Web Speech API pour la transcription, MediaRecorder pour l'audio, `localStorage`
 
 ## 🤝 Contribuer
 
-Les contributions sont bienvenues, en particulier :
+Le code est visible publiquement, mais ce n'est pas (encore) un projet ouvert aux contributions externes : le développement reste géré par Sanaba.
 
-- Enrichir `exercises.js` : sujets, vocabulaire, virelangues, textes de lecture
-- Ajouter un moule de structure dans `FRAMEWORKS`
-- Améliorer la détection des mots de remplissage et des marqueurs de structure (`SIGNPOSTS`) pour d'autres accents et dialectes
-- Ajouter une langue dans `i18n.js`
-- S'attaquer à un point de la Phase 2
-
-Ouvre une *issue* pour signaler un bug ou proposer une idée, ou une *pull request* directement.
+Tu as repéré un bug ou tu as une idée ? Ouvre une *issue* — c'est toujours bienvenu.
 
 ## 📄 Licence
 
-MIT — voir le fichier `LICENSE`.
+Tous droits réservés — voir le fichier `LICENSE`. Le code est publié à titre de démonstration ; il n'est pas libre de droits, et sa copie, sa modification ou sa réutilisation ne sont pas autorisées sans permission.
 
 ---
 
@@ -308,16 +302,10 @@ Web Speech API for transcription, MediaRecorder for audio, `localStorage` for me
 
 ## 🤝 Contributing
 
-Contributions are welcome, especially:
+The code is publicly visible, but this isn't (yet) a project open to outside contributions — development stays with Sanaba.
 
-- Enriching `exercises.js`: topics, vocabulary, tongue twisters, reading texts
-- Adding a structure template to `FRAMEWORKS`
-- Improving filler-word and structure-marker detection (`SIGNPOSTS`) for other accents and dialects
-- Adding a language to `i18n.js`
-- Taking on a Phase 2 item
-
-Open an issue to report a bug or suggest an idea, or a pull request directly.
+Spotted a bug or have an idea? Open an issue — always welcome.
 
 ## 📄 License
 
-MIT — see the `LICENSE` file.
+All rights reserved — see the `LICENSE` file. This code is published for demonstration purposes; it isn't free to copy, modify, or reuse without permission.

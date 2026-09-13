@@ -109,7 +109,7 @@ const I18N = {
 
     // Pied de page
     credit: "Fait par Sanaba, étudiante en analyse de données qui doit améliorer sa communication d'ici la fin de sa session. 💜",
-    footerNote: "Projet open-source — libre d'être copié, modifié et amélioré par n'importe quel·le étudiant·e.",
+    footerNote: "Projet développé par Sanaba Kanté — code visible, mais son utilisation ou sa reprise n'est pas libre sans autorisation.",
 
     // Réglages
     settingsTitle: "Réglages",
@@ -219,7 +219,7 @@ const I18N = {
     recapEmpty: "You haven't recorded an exercise this session yet — come back any time.",
 
     credit: "Made by Sanaba, a data analytics student working on her communication before the end of her semester. 💜",
-    footerNote: "Open-source project — free to copy, modify and improve for any student.",
+    footerNote: "Project built by Sanaba Kanté — code is visible, but reuse isn't free without permission.",
 
     settingsTitle: "Settings",
     apiKeyLabel: "Claude API key (Anthropic)",

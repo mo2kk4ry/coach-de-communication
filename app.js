@@ -110,7 +110,13 @@ function countFillers(text, lang) {
 
 // Cherche des marqueurs de structure ("premièrement", "par exemple", "en résumé"…)
 // dans ce qui a été dit, et en tire une note sur 100.
-function analyzeStructure(text, lang) {
+//
+// frameworkId (optionnel) : quand l'exercice "Structure guidée" est actif, on
+// reçoit le moule choisi (3 idées / PREP / STAR / Problème → Solution). L'ouverture
+// et la clôture attendues s'adaptent alors à ce moule — on n'exige plus un "plan
+// annoncé en trois parties" pour un moule comme STAR ou PREP, qui ne fonctionne pas
+// comme ça. Les transitions et les exemples, eux, restent communs à tous les moules.
+function analyzeStructure(text, lang, frameworkId) {
   const flat = " " + text.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/\s+/g, " ") + " ";
   const sets = SIGNPOSTS[lang] || SIGNPOSTS.fr;
 
@@ -121,25 +127,35 @@ function analyzeStructure(text, lang) {
       return new RegExp(`(?<![\\p{L}])${escaped}(?![\\p{L}])`, "u").test(flat);
     });
 
-  const plan = hits(sets.plan);
+  const custom = FRAMEWORK_SIGNPOSTS[frameworkId];
+  const openList = custom ? custom[lang].opening : sets.plan;
+  const closeList = custom ? custom[lang].closing : sets.conclusion;
+  const labels = FRAMEWORK_STRUCT_LABELS[frameworkId] || {
+    openKey: "structPlan",
+    openTip: "structPlanTip",
+    closeKey: "structConclusion",
+    closeTip: "structConclusionTip",
+  };
+
+  const opening = hits(openList);
   const transition = hits(sets.transition);
   const example = hits(sets.example);
-  const conclusion = hits(sets.conclusion);
+  const closing = hits(closeList);
 
   let score = 0;
-  if (plan.length) score += 30;
+  if (opening.length) score += 30;
   if (transition.length >= 2) score += 30;
   else if (transition.length === 1) score += 15;
   if (example.length) score += 20;
-  if (conclusion.length) score += 20;
+  if (closing.length) score += 20;
 
   return {
     score,
     items: [
-      { key: "structPlan", tip: "structPlanTip", ok: plan.length > 0, found: plan },
+      { key: labels.openKey, tip: labels.openTip, ok: opening.length > 0, found: opening },
       { key: "structTransitions", tip: "structTransitionsTip", ok: transition.length >= 2, found: transition },
       { key: "structExample", tip: "structExampleTip", ok: example.length > 0, found: example },
-      { key: "structConclusion", tip: "structConclusionTip", ok: conclusion.length > 0, found: conclusion },
+      { key: labels.closeKey, tip: labels.closeTip, ok: closing.length > 0, found: closing },
     ],
   };
 }
@@ -1037,7 +1053,8 @@ function computeAndRenderMetrics() {
   // Note de structure — sauf en lecture/articulation, où on lit un texte imposé
   const isReading = state.mode && state.mode.kind === "read";
   if (text && !isReading && countWords(text) >= 20) {
-    const st = analyzeStructure(text, state.lang);
+    const frameworkId = state.mode && state.mode.kind === "structure" ? state.frameworkId : null;
+    const st = analyzeStructure(text, state.lang, frameworkId);
     $("structureBox").hidden = false;
     $("structureValue").textContent = st.score + " / 100";
     $("structureFill").style.width = st.score + "%";

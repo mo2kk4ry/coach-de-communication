@@ -1,194 +1,128 @@
-🎤 Coach de communication
+# 🎙️ Coach de communication
 
-Pratique ta communication. Enregistre-toi. Écoute-toi. Progresse.
+**➡️ [Essayer l'app en ligne](https://mo2kk4ry.github.io/coach-de-communication/)**
 
-➡️ Essayer l’application en ligne
+Une app web gratuite et open-source pour pratiquer sa communication orale : choisis un exercice, enregistre-toi, réécoute-toi, obtiens ta transcription et tes statistiques (débit, mots de remplissage, hésitations, structure), et — si tu veux — un retour détaillé généré par l'IA Claude.
 
-Coach de communication est une application web bilingue conçue pour aider les étudiants, jeunes professionnels et toute personne souhaitant améliorer sa communication orale.
+Fait par Sanaba, étudiante en analyse de données qui doit améliorer sa communication d'ici la fin de sa session. Pensé pour être simple à utiliser, gratuit dans sa version de base, et libre d'être copié, modifié ou amélioré par d'autres étudiant·e·s.
 
-L’application permet de pratiquer différents aspects de la communication : prise de parole spontanée, improvisation, débat, entrevue, articulation, lecture à voix haute et storytelling.
+**[English version below](#-communication-coach-english)**
 
-Le projet a été créé par Sanaba, étudiante en analyse de données, à partir d’un objectif personnel : devenir plus à l’aise, plus claire et plus spontanée à l’oral.
+## 🎲 Les 8 exercices
 
-Le projet est actuellement en développement. De nouvelles fonctionnalités, exercices et améliorations sont régulièrement ajoutés.
+| Exercice | Ce que tu fais |
+|---|---|
+| 🎯 **Sujet libre** | Un sujet au hasard (ou le tien), tu parles 1 à 2 minutes. |
+| 🧱 **Structure guidée** | Tu choisis un moule (3 idées, PREP, STAR, Problème→Solution) et l'app te guide en direct, section par section, avec un minuteur par section. |
+| 🔤 **Mot au hasard** | Un mot + sa définition, 60 s de préparation chronométrée, puis tu présentes. |
+| ⚡ **Improvisation rapide** | Des questions courtes qui changent toutes seules toutes les 30 secondes. |
+| 🥊 **Débat** | Une affirmation, un camp tiré au sort (POUR ou CONTRE), 90 s de préparation. |
+| 🎧 **Podcast / Entrevue** | Une série de questions (embauche, technique data, podcast, média, stage). |
+| 👄 **Articulation** | Des virelangues à dire sans s'emmêler, avec un score de précision. |
+| 📜 **Lecture (téléprompteur)** | Un texte qui défile à la vitesse que tu choisis, tu lis à voix haute. |
 
-⸻
+Chaque exercice vient avec une **mini-leçon** de 3 règles concrètes (structurer en 3 idées, méthode STAR, articuler, etc.).
 
-✨ Fonctionnalités
+## 🧱 L'aide à la structuration
 
-🎯 Exercices de communication
+C'est le cœur de l'app. Trois outils qui se complètent :
 
-L’application propose actuellement plusieurs types de pratiques :
+1. **Les moules guidés** — Le mode « Structure guidée » affiche pendant que tu parles la section en cours (« Annonce ton plan », « Idée 1 + exemple », « Conclusion »), un conseil précis pour chacune, une barre de progression et un minuteur. Ça avance tout seul, tu n'as plus à penser à ta structure en parlant.
+2. **Le plan en 3 idées** — Tu écris tes trois idées en mots-clés pendant la préparation ; elles restent affichées à l'écran pendant l'enregistrement. Le retour IA compare aussi ce que tu as dit à ton plan.
+3. **La note de structure sur 100** — Après chaque prise, l'app relit ta transcription et vérifie quatre choses : as-tu annoncé ton plan, marqué tes transitions, donné un exemple, conclu clairement. Elle te montre les mots exacts trouvés, et la phrase à utiliser pour ce qui manque.
 
-* 🎯 Sujet libre — parler spontanément sur un sujet donné
-* 🔤 Mot au hasard — préparer puis présenter une idée à partir d’un mot
-* ⚡ Improvisation rapide — répondre à des questions dans un temps limité
-* 🥊 Débat — défendre une position POUR ou CONTRE
-* 🎧 Podcast / Entrevue — pratiquer des questions professionnelles et conversationnelles
-* 👄 Articulation — travailler la précision et la fluidité
-* 📜 Lecture / Téléprompteur — pratiquer la lecture à voix haute
+## ✨ Fonctionnalités
 
-Chaque exercice est accompagné de conseils pratiques pour aider l’utilisateur à améliorer sa performance.
+- 8 types d'exercices, tous bilingues FR/EN
+- **Aide à la structuration** : moules guidés en direct, plan en 3 idées, note de structure sur 100
+- **Séances chronométrées** de 15, 30, 45 ou 60 minutes (ou mode libre), avec récapitulatif à la fin
+- Enregistrement audio + **réécoute de ta propre voix** + transcription automatique en direct (Chrome / Edge)
+- Statistiques instantanées et **100 % gratuites**, sans clé API : durée, mots par minute, mots de remplissage, répétitions/hésitations
+- **Score de précision de lecture** pour les modes articulation et téléprompteur (comparaison mot à mot avec le texte cible)
+- Objectif personnel + **série de jours consécutifs** et minutes parlées cumulées
+- Retour détaillé optionnel généré par Claude (IA) — nécessite ta propre clé API Anthropic
+- Historique de tes sessions précédentes (sauvegardé uniquement dans ton navigateur)
+- Aucune inscription, aucun compte, aucun serveur : tout tourne dans ton navigateur
 
-🎙️ Enregistrement et analyse
+## 🚀 Utiliser l'app
 
-Selon les fonctionnalités disponibles dans le navigateur :
+### Option 1 — en ligne (le plus simple)
 
-* Enregistrement audio
-* Réécoute de sa propre voix
-* Transcription automatique
-* Durée de la séance
-* Mots par minute
-* Mots de remplissage
-* Répétitions et hésitations
-* Précision de lecture
-* Historique des séances
-* Suivi des minutes parlées
+Ouvre **https://mo2kk4ry.github.io/coach-de-communication/** — c'est tout.
 
-📈 Progression
+### Option 2 — sur ton ordinateur
 
-L’application permet également de suivre sa pratique au fil du temps :
+1. Télécharge les fichiers du projet (bouton "Code" → "Download ZIP" sur GitHub, ou clone le dépôt).
+2. Ouvre `index.html` dans Chrome ou Edge (double-clic suffit).
+3. C'est tout — aucune installation, aucun serveur requis.
 
-* objectif personnel
-* série de jours consécutifs
-* temps total de pratique
-* historique des séances
-* évolution des performances
+> 💡 **Navigateur recommandé : Chrome ou Edge.** La transcription automatique utilise la Web Speech API, qui n'est pas supportée par tous les navigateurs (Firefox et Safari, par exemple, ne la supportent pas bien). Dans les autres navigateurs, tu peux toujours enregistrer ta voix et taper ton texte toi-même — les statistiques et le retour IA fonctionnent quand même.
 
-🌎 Bilingue
+## 🔑 Le retour IA (optionnel, payant à l'usage)
 
-L’application est actuellement disponible en :
+Les statistiques de base (durée, débit, mots de remplissage, structure, précision de lecture) sont **toujours gratuites** et ne nécessitent rien de plus.
 
-* 🇫🇷 Français
-* 🇬🇧 English
+Pour débloquer un retour détaillé et personnalisé généré par Claude :
 
-⸻
+1. Crée un compte sur [console.anthropic.com](https://console.anthropic.com/settings/keys)
+2. Génère une clé API (commence par `sk-ant-...`)
+3. Dans l'app, clique sur ⚙️ **Réglages** et colle ta clé
+4. Ta clé reste uniquement dans ton navigateur (`localStorage`) — elle n'est jamais envoyée ailleurs qu'à l'API d'Anthropic, et jamais stockée sur un serveur
 
-🤖 Feedback avec l’intelligence artificielle
+⚠️ **L'utilisation de l'API Anthropic est payante à l'usage** (pas un abonnement — tu paies seulement ce que tu utilises). Avec le modèle utilisé ici (`claude-3-5-haiku-latest`), une session de pratique coûte généralement une fraction de cent à quelques cents. Anthropic offre parfois un crédit gratuit de départ aux nouveaux comptes — vérifie les tarifs actuels sur [anthropic.com/pricing](https://www.anthropic.com/pricing).
 
-Une fonctionnalité de feedback assisté par IA permet d’obtenir une analyse plus détaillée de sa performance.
+## 🌐 Héberger ta propre version sur GitHub Pages
 
-Le feedback peut notamment aider à identifier :
+Pas besoin de ligne de commande — tout se fait depuis le site web de GitHub.
 
-* la structure des réponses
-* la clarté
-* la concision
-* les hésitations
-* la répétition
-* la qualité des arguments
-* les points à améliorer
-* les prochaines étapes de pratique
+1. Sur GitHub, crée un nouveau dépôt (repository), par exemple `coach-de-communication`. Laisse-le public si tu veux que d'autres puissent l'utiliser et contribuer.
+2. Dans ton nouveau dépôt, clique sur **"uploading an existing file"** (ou "Add file" → "Upload files").
+3. Glisse-dépose les 6 fichiers du projet : `index.html`, `style.css`, `app.js`, `i18n.js`, `prompts.js`, `exercises.js` (et ce `README.md`, `LICENSE` si tu veux).
+4. Clique sur **"Commit changes"**.
+5. Va dans **Settings** (du dépôt) → **Pages** (dans le menu de gauche).
+6. Sous "Build and deployment", choisis **Source : Deploy from a branch**, puis **Branch : main** et dossier **/ (root)**. Sauvegarde.
+7. Après une minute ou deux, ton app sera en ligne à une adresse du type :
+   `https://ton-nom-utilisateur.github.io/coach-de-communication/`
 
-Cette fonctionnalité est actuellement expérimentale et peut évoluer dans les prochaines versions.
+## 🤝 Contribuer
 
-⸻
+Ce projet est fait pour grandir. Quelques idées d'améliorations bienvenues :
 
-🎓 Pour qui ?
+- Ajouter des sujets, des mots de vocabulaire, des virelangues ou des textes de lecture dans `exercises.js`
+- Ajouter un nouveau moule de structure dans `FRAMEWORKS`
+- Ajouter plus de sujets de pratique dans `prompts.js`
+- Ajouter une nouvelle langue dans `i18n.js`
+- Améliorer la détection des mots de remplissage et des marqueurs de structure (`SIGNPOSTS`) pour d'autres accents/dialectes
+- Créer un nouveau type d'exercice (il suffit d'ajouter une entrée dans `EXERCISE_MODES`)
 
-Coach de communication est particulièrement adapté aux personnes qui souhaitent améliorer leur communication dans des situations réelles :
+N'hésite pas à ouvrir une *issue* ou une *pull request* sur GitHub.
 
-* 🎓 étudiants
-* 🌎 étudiants internationaux et nouveaux arrivants
-* 💼 jeunes professionnels
-* 🗣️ personnes souhaitant améliorer leur prise de parole
-* 🎤 personnes préparant des présentations
-* 👔 personnes préparant des entretiens
-* 🚀 entrepreneurs et créateurs de contenu
-* 🇫🇷🇬🇧 personnes qui utilisent le français et l’anglais dans leur quotidien professionnel
+## 🔒 Confidentialité
 
-⸻
+- Rien n'est envoyé à un serveur, sauf si tu demandes explicitement un retour IA (dans ce cas, seul le texte de ta transcription et le sujet sont envoyés à l'API d'Anthropic — jamais ton audio).
+- Ta clé API, ton objectif, tes statistiques et ton historique sont stockés uniquement dans ton navigateur (`localStorage`). Si tu changes de navigateur ou d'appareil, ils ne te suivent pas.
+- L'enregistrement audio reste dans ton navigateur et n'est jamais téléversé nulle part.
 
-🚀 Essayer l’application
+## 📄 Licence
 
-En ligne
+Ce projet est sous licence MIT — libre d'utilisation, de modification et de partage. Voir le fichier `LICENSE`.
 
-Vous pouvez essayer la version actuelle directement depuis votre navigateur :
-
-https://mo2kk4ry.github.io/coach-de-communication/
-
-Chrome ou Edge sont actuellement recommandés pour bénéficier de la meilleure compatibilité avec les fonctionnalités vocales.
-
-⸻
-
-🛠️ Technologies
-
-Le projet utilise actuellement des technologies web permettant de fonctionner directement dans le navigateur.
-
-L’architecture et les technologies utilisées pourront évoluer avec les prochaines versions du produit.
-
-⸻
-
-🔐 Confidentialité
-
-La confidentialité des utilisateurs est une priorité du projet.
-
-Les fonctionnalités qui fonctionnent directement dans le navigateur ne nécessitent pas nécessairement de compte utilisateur ou de serveur.
-
-Certaines fonctionnalités utilisant des services externes peuvent transmettre les données nécessaires au fonctionnement de la fonctionnalité concernée.
-
-Les informations sensibles telles que les clés API personnelles ne doivent pas être partagées publiquement.
-
-La politique de confidentialité pourra être détaillée davantage avant la mise à disposition d’une version commerciale.
-
-⸻
-
-🧪 Statut du projet
-
-Status: Active development 🚧
-
-Coach de communication est actuellement un prototype en évolution.
-
-Les prochaines versions pourront notamment inclure :
-
-* davantage d’exercices
-* meilleure analyse des performances vocales
-* feedback plus personnalisé
-* nouveaux scénarios professionnels
-* comparaison des performances dans le temps
-* exercices adaptés au niveau de l’utilisateur
-* nouvelles langues
-* ressources éducatives
-* recommandations de contenu
-* fonctionnalités basées sur l’intelligence artificielle
-* comptes utilisateurs et synchronisation
-* fonctionnalités premium
-
-⸻
-
-🗺️ Vision
-
-L’objectif à long terme est de développer Coach de communication en une plateforme complète permettant de pratiquer, mesurer et améliorer ses compétences en communication.
-
-Le produit pourrait évoluer vers différents usages :
-
-Practice → Record → Review → Improve → Repeat
-
-L’ambition est de rendre l’entraînement à la communication plus accessible, pratique et régulier.
-
-⸻
-
-📬 Contact
-
-Pour toute question ou suggestion concernant le projet, vous pouvez ouvrir une discussion ou une issue sur le dépôt GitHub.
-
-⸻
-
-© 2026 Sanaba. All rights reserved.
 ---
 
 # 🎙️ Communication Coach (English)
 
 **➡️ [Try the app online](https://mo2kk4ry.github.io/coach-de-communication/)**
 
-A free, open-source web app to practice spoken communication: pick an exercise, record yourself, play yourself back, get a transcript and instant stats (pace, filler words, hesitations), and optionally detailed AI-generated feedback from Claude.
+A free, open-source web app to practice spoken communication: pick an exercise, record yourself, play yourself back, get a transcript and instant stats (pace, filler words, hesitations, structure), and optionally detailed AI-generated feedback from Claude.
 
 Made by Sanaba, a data analytics student working on her communication before the end of her semester. Built to be simple to use, free at its core, and free for other students to copy, modify, or improve.
 
-## 🎲 The 7 exercises
+## 🎲 The 8 exercises
 
 | Exercise | What you do |
 |---|---|
 | 🎯 **Free topic** | A random topic (or your own), you speak for 1–2 minutes. |
+| 🧱 **Guided structure** | Pick a template (3 ideas, PREP, STAR, Problem→Solution) and the app walks you through live, section by section, with a timer per section. |
 | 🔤 **Random word** | A word plus its definition, a 60 s timed prep, then you present. |
 | ⚡ **Rapid fire** | Short questions that change on their own every 30 seconds. |
 | 🥊 **Debate** | A statement and a randomly assigned side (FOR or AGAINST), 90 s of prep. |
@@ -198,9 +132,18 @@ Made by Sanaba, a data analytics student working on her communication before the
 
 Every exercise comes with a **mini-lesson**: 3 concrete rules (structure in 3 ideas, the STAR method, articulation, and so on).
 
+## 🧱 The structuring aids
+
+This is the heart of the app. Three tools that work together:
+
+1. **Guided templates** — The "Guided structure" mode shows, while you speak, the current section ("Announce your plan", "Idea 1 + example", "Conclusion"), a specific tip for each, a progress bar and a timer. It advances on its own, so you no longer have to think about structure while speaking.
+2. **The 3-idea plan** — You write your three ideas as keywords during prep; they stay on screen while you record. The AI feedback also compares what you said to your plan.
+3. **The structure score out of 100** — After each take, the app reads your transcript and checks four things: did you announce your plan, signpost your transitions, give an example, close clearly. It shows the exact words it found, and the sentence to use for whatever is missing.
+
 ## ✨ Features
 
-- 7 exercise types, all bilingual FR/EN
+- 8 exercise types, all bilingual FR/EN
+- **Structuring aids**: live guided templates, a 3-idea plan, a structure score out of 100
 - **Timed sessions** of 15, 30, 45 or 60 minutes (or free mode), with an end-of-session recap
 - Audio recording + **playback of your own voice** + live automatic transcription (Chrome / Edge)
 - Instant, **100% free** stats, no API key needed: duration, words per minute, filler words, repetitions/hesitations
@@ -226,7 +169,7 @@ Open **https://mo2kk4ry.github.io/coach-de-communication/** — that's it.
 
 ## 🔑 AI feedback (optional, pay-per-use)
 
-The core stats (duration, pace, filler words, reading accuracy) are **always free** and need nothing extra.
+The core stats (duration, pace, filler words, structure, reading accuracy) are **always free** and need nothing extra.
 
 To unlock detailed, personalized feedback from Claude:
 
@@ -255,9 +198,10 @@ No command line needed — everything can be done from the GitHub website.
 This project is meant to grow. A few welcome ideas:
 
 - Add topics, vocabulary words, tongue twisters or reading texts to `exercises.js`
+- Add a new structure template to `FRAMEWORKS`
 - Add more practice prompts to `prompts.js`
 - Add a new language in `i18n.js`
-- Improve filler-word detection for other accents/dialects
+- Improve filler-word and structure-marker detection (`SIGNPOSTS`) for other accents/dialects
 - Create a new exercise type (just add an entry to `EXERCISE_MODES`)
 
 Feel free to open an issue or a pull request on GitHub.

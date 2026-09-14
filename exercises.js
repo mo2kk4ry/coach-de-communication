@@ -814,6 +814,100 @@ const SIGNPOSTS = {
 };
 
 // ---------------------------------------------------------------------------
+// Ouverture et clôture attendues selon le moule choisi (mode « Structure guidée »).
+// Les transitions et les exemples (SIGNPOSTS.transition / .example) restent
+// communs à tous les moules : seule la façon d'ouvrir et de conclure change,
+// pour ne plus exiger un « plan annoncé en trois parties » quand ce n'est pas
+// le moule utilisé.
+// ---------------------------------------------------------------------------
+const FRAMEWORK_SIGNPOSTS = {
+  prep: {
+    fr: {
+      opening: [
+        "à mon avis", "selon moi", "je pense que", "ma position est", "je crois que",
+        "pour moi", "ma réponse est", "je dirais que",
+      ],
+      closing: [
+        "c'est pour ça que", "voilà pourquoi", "je le répète", "ma position reste",
+        "donc pour répondre", "en résumé", "au final ma réponse",
+      ],
+    },
+    en: {
+      opening: [
+        "in my opinion", "i believe", "i think that", "my position is", "for me",
+        "my answer is", "i would say",
+      ],
+      closing: [
+        "that's why", "so to answer", "i'll repeat", "my position stands",
+        "in short", "so my answer",
+      ],
+    },
+  },
+  star: {
+    fr: {
+      opening: [
+        "la situation", "ça s'est passé", "c'était au", "à l'époque", "quand j'étais",
+        "il y a", "je travaillais", "dans le cadre de", "c'était pendant",
+      ],
+      closing: [
+        "résultat", "au final", "grâce à ça", "j'ai réussi", "ça a permis",
+        "le résultat", "au bout du compte", "ce que ça a changé",
+      ],
+    },
+    en: {
+      opening: [
+        "the situation", "it happened", "at the time", "back when", "i was working",
+        "while i was", "this was during",
+      ],
+      closing: [
+        "as a result", "in the end", "thanks to that", "i managed to",
+        "this led to", "the outcome",
+      ],
+    },
+  },
+  probleme: {
+    fr: {
+      opening: [
+        "le contexte", "aujourd'hui", "actuellement", "dans notre cas",
+        "pour situer", "en ce moment",
+      ],
+      closing: [
+        "ça permettrait", "grâce à ça", "je vous invite à", "je vous demande de",
+        "j'aimerais que vous", "passons à l'action", "concrètement, je propose que",
+      ],
+    },
+    en: {
+      opening: [
+        "the context", "today", "currently", "in our case", "to set the scene",
+        "right now",
+      ],
+      closing: [
+        "this would allow", "thanks to this", "i invite you to", "i'm asking you to",
+        "let's take action", "so i'd like you to",
+      ],
+    },
+  },
+};
+
+// Libellés (clés i18n) affichés pour l'ouverture et la clôture selon le moule.
+// Le moule "trois" (et l'absence de moule, en mode libre) utilise les libellés
+// génériques structPlan / structConclusion, déjà définis dans i18n.js.
+const FRAMEWORK_STRUCT_LABELS = {
+  prep: {
+    openKey: "structPoint", openTip: "structPointTip",
+    closeKey: "structPointBack", closeTip: "structPointBackTip",
+  },
+  star: {
+    openKey: "structSituation", openTip: "structSituationTip",
+    closeKey: "structResult", closeTip: "structResultTip",
+  },
+  probleme: {
+    openKey: "structContext", openTip: "structContextTip",
+    closeKey: "structBenefit", closeTip: "structBenefitTip",
+  },
+};
+
+// ---------------------------------------------------------------------------
 // Helpers de tirage
 // ---------------------------------------------------------------------------
 function pickRandom(list) {

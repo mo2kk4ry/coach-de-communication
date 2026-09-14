@@ -17,6 +17,11 @@ const I18N = {
     freeMode: "Libre",
     minutesShort: "min",
     chooseExercise: "Choisis ton exercice",
+    goalSelectLabel: "Objectif",
+    audienceSelectLabel: "Interlocuteur",
+    chooseGoalOption: "Choisir un objectif…",
+    noAudience: "Peu importe",
+    recommendedBadge: "★ Recommandé pour ton objectif",
 
     // Bandeau de séance
     endSession: "Terminer",
@@ -150,6 +155,11 @@ const I18N = {
     freeMode: "Free",
     minutesShort: "min",
     chooseExercise: "Pick your exercise",
+    goalSelectLabel: "Goal",
+    audienceSelectLabel: "Audience",
+    chooseGoalOption: "Pick a goal…",
+    noAudience: "No preference",
+    recommendedBadge: "★ Recommended for your goal",
 
     endSession: "End",
     sessionRunning: "Session running",

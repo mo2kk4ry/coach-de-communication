@@ -784,6 +784,18 @@ function resetPlayback() {
   }
 }
 
+// Convertit l'enregistrement en base64 pour pouvoir le garder dans
+// localStorage (contrairement à une URL blob, qui ne survit pas au
+// rechargement de la page).
+function blobToDataUrl(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
 // Chrome n'écrit pas la durée dans les fichiers webm qu'il enregistre :
 // le lecteur affiche alors une durée infinie et la barre de progression est
 // bloquée. On force le navigateur à la recalculer une fois le fichier chargé.
@@ -909,6 +921,16 @@ async function startRecording() {
     playback.load();
     playback.hidden = false;
     $("playbackHint").hidden = false;
+
+    // On sauvegarde aussi l'enregistrement dans l'historique (en base64),
+    // pour pouvoir se réécouter plus tard depuis les sessions précédentes.
+    // Ça arrive forcément après saveToHistory() (déclenché par
+    // stopRecording juste après .stop()) : on complète donc la dernière
+    // entrée déjà créée, comme attachFeedbackToLastHistory le fait pour le
+    // retour IA.
+    blobToDataUrl(blob)
+      .then((dataUrl) => attachAudioToLastHistory(dataUrl))
+      .catch(() => { /* pas grave : le reste de l'historique reste intact */ });
   };
 
   // Un morceau par seconde : même si quelque chose se passe mal à l'arrêt,
@@ -1320,6 +1342,40 @@ function loadHistory() {
   }
 }
 
+// L'audio en base64 pèse beaucoup plus lourd que le reste d'une entrée
+// d'historique. Pour ne pas risquer de dépasser le quota de localStorage au
+// fil des sessions, on ne garde le son que pour les entrées les plus
+// récentes ; les plus anciennes gardent transcript/stats/retour IA, mais
+// perdent leur enregistrement.
+const MAX_HISTORY_AUDIO = 8;
+
+function pruneOldAudio(history) {
+  history.forEach((item, i) => {
+    if (i >= MAX_HISTORY_AUDIO) delete item.audioUrl;
+  });
+  return history;
+}
+
+// Écrit l'historique dans localStorage. L'audio base64 peut faire dépasser
+// le quota disponible : si l'écriture échoue, on retire l'enregistrement des
+// entrées les plus anciennes une à une jusqu'à ce que ça rentre, plutôt que
+// de perdre tout l'historique d'un coup.
+function saveHistorySafely(history) {
+  for (let guard = 0; guard <= history.length; guard++) {
+    try {
+      localStorage.setItem(STORAGE.history, JSON.stringify(history));
+      return;
+    } catch (e) {
+      let idx = -1;
+      for (let i = history.length - 1; i >= 0; i--) {
+        if (history[i].audioUrl) { idx = i; break; }
+      }
+      if (idx === -1) return; // plus rien à alléger : on abandonne sans planter
+      delete history[idx].audioUrl;
+    }
+  }
+}
+
 function saveToHistory(aiFeedbackText) {
   const history = loadHistory();
   history.unshift({
@@ -1332,7 +1388,7 @@ function saveToHistory(aiFeedbackText) {
     durationSeconds: Math.round(state.lastDurationSeconds),
     fillers: countFillers(currentTranscriptText(), state.lang).total,
   });
-  localStorage.setItem(STORAGE.history, JSON.stringify(history.slice(0, 60)));
+  saveHistorySafely(pruneOldAudio(history.slice(0, 60)));
   renderHistory();
 }
 
@@ -1340,7 +1396,18 @@ function attachFeedbackToLastHistory(text) {
   const history = loadHistory();
   if (!history.length) return;
   history[0].feedback = text || "";
-  localStorage.setItem(STORAGE.history, JSON.stringify(history));
+  saveHistorySafely(history);
+  renderHistory();
+}
+
+// Vient compléter la dernière entrée d'historique avec l'audio, une fois que
+// le MediaRecorder a fini d'assembler le fichier (ça arrive après
+// saveToHistory, déclenché plus tôt par stopRecording).
+function attachAudioToLastHistory(dataUrl) {
+  const history = loadHistory();
+  if (!history.length) return;
+  history[0].audioUrl = dataUrl;
+  saveHistorySafely(pruneOldAudio(history));
   renderHistory();
 }
 
@@ -1364,11 +1431,18 @@ function renderHistory() {
       const meta = `${dateStr} · ${formatTime(item.durationSeconds)}${
         item.fillers ? ` · 🔁 ${item.fillers}` : ""
       }${item.feedback ? " · 🤖" : ""}`;
+      // item.audioUrl est une data URL générée par l'app elle-même (jamais
+      // du texte saisi par quelqu'un), donc pas de risque à l'insérer telle
+      // quelle dans l'attribut src.
+      const audioPlayer = item.audioUrl
+        ? `<audio class="history-audio" controls preload="none" src="${item.audioUrl}"></audio>`
+        : "";
       return `<div class="history-item">
         <span class="history-icon">${item.modeIcon || "🎯"}</span>
         <div class="history-item-main">
           <p class="history-item-topic">${escapeHtml(item.topic || "")}</p>
           <p class="history-item-meta">${escapeHtml(meta)}</p>
+          ${audioPlayer}
         </div>
       </div>`;
     })

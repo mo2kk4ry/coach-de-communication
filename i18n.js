@@ -71,6 +71,21 @@ const I18N = {
     structGreat: "Ton discours a un vrai squelette. C'est exactement ça.",
     structOk: "La base est là, il manque juste quelques panneaux de signalisation.",
     structWeak: "Tes idées sont là, mais rien ne les relie à l'oral. Vise le plan annoncé + les transitions en premier.",
+    // Ouverture/clôture spécifiques au moule PREP
+    structPoint: "Donner ta position dès le départ",
+    structPointTip: "Dis « à mon avis… » ou « ma position est… » dans la toute première phrase, sans mise en contexte.",
+    structPointBack: "Reboucler sur ta position",
+    structPointBackTip: "Termine par « c'est pour ça que… » ou « voilà pourquoi… » en reformulant ta position de départ.",
+    // Ouverture/clôture spécifiques au moule STAR
+    structSituation: "Poser la situation",
+    structSituationTip: "Commence par « la situation, c'était… » ou « ça s'est passé quand… » pour planter le décor.",
+    structResult: "Donner le résultat",
+    structResultTip: "Termine par « résultat… » ou « grâce à ça… », si possible avec un chiffre ou un impact concret.",
+    // Ouverture/clôture spécifiques au moule Problème → Solution
+    structContext: "Planter le contexte",
+    structContextTip: "Commence par « le contexte, c'est que… » ou « aujourd'hui… » pour situer de qui/quoi tu parles.",
+    structBenefit: "Terminer par un appel à l'action",
+    structBenefitTip: "Termine par « grâce à ça… » puis dis clairement ce que tu attends de ton auditoire.",
 
     // Consignes par mode
     instrLibre: "Parle de ce sujet pendant 1 à 2 minutes.",
@@ -186,6 +201,21 @@ const I18N = {
     structGreat: "Your talk has a real skeleton. That's exactly it.",
     structOk: "The base is there, you're just missing a few signposts.",
     structWeak: "Your ideas are there, but nothing connects them out loud. Aim for the announced plan + transitions first.",
+    // PREP-specific opening/closing
+    structPoint: "State your position up front",
+    structPointTip: "Say “in my opinion…” or “my position is…” in the very first sentence, no warm-up.",
+    structPointBack: "Loop back to your position",
+    structPointBackTip: "Close with “that's why…”, restating your opening position.",
+    // STAR-specific opening/closing
+    structSituation: "Set the situation",
+    structSituationTip: "Open with “the situation was…” or “it happened when…” to set the scene.",
+    structResult: "Give the result",
+    structResultTip: "Close with “as a result…”, ideally with a number or a concrete impact.",
+    // Problem → Solution-specific opening/closing
+    structContext: "Set the context",
+    structContextTip: "Open with “the context is…” or “today…” to say who/what you're talking about.",
+    structBenefit: "End with a call to action",
+    structBenefitTip: "Close with “thanks to this…” then say clearly what you want your audience to do.",
 
     instrLibre: "Speak about this topic for 1 to 2 minutes.",
     instrStructure: "Prepare your plan, then let the app walk you through section by section as you speak.",

@@ -660,6 +660,85 @@ const GOALS = [
   { id: "articulation", icon: "👄", fr: "Mieux articuler et parler moins vite", en: "Articulate better and slow down" },
 ];
 
+// Modes d'exercice recommandés selon l'objectif choisi (mise en avant, pas de filtrage :
+// tous les exercices restent accessibles).
+const GOAL_RECOMMENDED_MODES = {
+  entretien: ["interview", "structure"],
+  presentation: ["structure", "libre"],
+  fillers: ["libre", "impro"],
+  clarte: ["structure", "debat"],
+  confiance: ["impro", "debat"],
+  articulation: ["articulation", "lecture"],
+};
+
+// ---------------------------------------------------------------------------
+// Interlocuteurs proposés : à qui s'adresse la personne pendant l'exercice.
+// Le champ "framing" est une phrase ajoutée à la consigne pour adapter le ton
+// et le vocabulaire attendus, sans réécrire tout le banc de sujets/questions.
+// ---------------------------------------------------------------------------
+const AUDIENCES = [
+  {
+    id: "public",
+    icon: "🌍",
+    fr: "Grand public",
+    en: "General audience",
+    framing: {
+      fr: "Adresse-toi à un public général : reste clair·e, évite le jargon.",
+      en: "Speak to a general audience: stay clear, avoid jargon.",
+    },
+  },
+  {
+    id: "collegues",
+    icon: "🧑‍💼",
+    fr: "Collègues",
+    en: "Coworkers",
+    framing: {
+      fr: "Adresse-toi à des collègues : ton professionnel mais détendu, le jargon du métier est correct.",
+      en: "Speak to coworkers: professional but relaxed tone, industry jargon is fine.",
+    },
+  },
+  {
+    id: "patron",
+    icon: "🧑‍💻",
+    fr: "Patron·ne / recruteur·se",
+    en: "Boss / recruiter",
+    framing: {
+      fr: "Adresse-toi à un·e patron·ne ou recruteur·se : reste concis·e et professionnel·le, va droit au but.",
+      en: "Speak to a boss or recruiter: stay concise and professional, get to the point.",
+    },
+  },
+  {
+    id: "client",
+    icon: "🤝",
+    fr: "Client·e",
+    en: "Client",
+    framing: {
+      fr: "Adresse-toi à un·e client·e : ton chaleureux et rassurant, explique sans survendre.",
+      en: "Speak to a client: warm, reassuring tone, explain without overselling.",
+    },
+  },
+  {
+    id: "famille",
+    icon: "❤️",
+    fr: "Ami·e ou famille",
+    en: "Friend or family",
+    framing: {
+      fr: "Adresse-toi à un·e proche : ton naturel et informel, comme une vraie conversation.",
+      en: "Speak to someone close to you: natural, informal tone, like a real conversation.",
+    },
+  },
+  {
+    id: "classe",
+    icon: "🎓",
+    fr: "Camarades de classe",
+    en: "Classmates",
+    framing: {
+      fr: "Adresse-toi à des camarades de classe : ton simple et dynamique, comme un exposé entre pairs.",
+      en: "Speak to classmates: simple, energetic tone, like a peer presentation.",
+    },
+  },
+];
+
 // ---------------------------------------------------------------------------
 // Les moules de structure (mode « Structure guidée »)
 // Chaque étape a une durée : l'app avance toute seule pendant l'enregistrement.

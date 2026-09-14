@@ -94,9 +94,19 @@ h1, h2, h3 { font-family: "Sora", "Plus Jakarta Sans", sans-serif; }
 }
 .stat-label { display: block; font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
 .goal-line {
-  display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; flex-wrap: wrap;
   margin-top: 14px; font-size: 13.5px; color: var(--ink-soft); font-weight: 600;
 }
+
+.select-wrap { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 150px; }
+.select-wrap .select-label { font-size: 11px; font-weight: 800; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.03em; }
+.select-wrap select {
+  font-family: inherit; font-size: 13.5px; font-weight: 700; color: var(--ink); cursor: pointer;
+  background: #fbfaff; border: 1px solid var(--border); border-radius: 12px; padding: 9px 10px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.select-wrap select:hover { border-color: var(--accent); }
+.select-wrap select:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
 
 .goal-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 4px; }
 .goal-btn {
@@ -147,6 +157,12 @@ h1, h2, h3 { font-family: "Sora", "Plus Jakarta Sans", sans-serif; }
 .ex-interview { border-left-color: #0e9a8a; } .ex-interview .ex-icon { background: #e2f8f5; }
 .ex-articulation { border-left-color: #16a34a; } .ex-articulation .ex-icon { background: #e9fbf0; }
 .ex-lecture { border-left-color: #5b3df0; } .ex-lecture .ex-icon { background: #ece8ff; }
+
+.exercise-card.recommended { box-shadow: 0 0 0 2px var(--accent-soft) inset, var(--shadow-soft); }
+.ex-recommended-badge {
+  align-self: flex-start; font-size: 10px; font-weight: 800; color: var(--accent-strong);
+  background: var(--accent-soft); border-radius: 999px; padding: 2px 8px; margin-bottom: 2px;
+}
 
 /* ---------- Retour accueil ---------- */
 .back-link {
